@@ -62,7 +62,7 @@ export default {
 h1{
   text-align: center;
   font-size: 3em;
-  margin-top: 2.5em;
+  margin-top: 2em;
 }
 .p-datatable {
   font-size: 20px;
