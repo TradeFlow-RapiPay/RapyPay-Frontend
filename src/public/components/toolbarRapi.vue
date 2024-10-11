@@ -1,6 +1,9 @@
 <script>
+import AuthenticationSection from "@/IAM/components/authentication-sector.vue";
+
 export default {
   name: "ToolbarRapi",
+  components: {AuthenticationSection},
   data() {
     return {
       selectedItem: null,
@@ -9,7 +12,7 @@ export default {
           label: 'Mis carteras',
           icon: 'pi pi-wallet',
           command: () => {
-            this.selectedItem = 'Mis carteras';
+            this.updateSelectedItem();
             this.$router.push('/my-wallets');
           },
           class: 'wallet-item'
@@ -18,13 +21,33 @@ export default {
           label: 'Bancos',
           icon: 'pi pi-building-columns',
           command: () => {
-            this.selectedItem = 'Bancos';
+            this.updateSelectedItem();
             this.$router.push('/banks');
           },
           class: 'bank-item'
         }
       ]
     }
+  },
+  watch: {
+    '$route'() {
+      this.updateSelectedItem();
+    }
+  },
+  methods: {
+    updateSelectedItem() {
+      const routeName = this.$route.name;
+      if (routeName === 'my-wallets') {
+        this.selectedItem = 'Mis carteras';
+      } else if (routeName === 'banks') {
+        this.selectedItem = 'Bancos';
+      } else if (routeName === 'sign-in' || routeName === 'sign-up') {
+        this.selectedItem = null;
+      }
+    }
+  },
+  created() {
+    this.updateSelectedItem();
   }
 }
 </script>
@@ -47,7 +70,8 @@ export default {
       </pv-menubar>
     </template>
     <template #end>
-      <div class="flex items-center gap-2">
+      <div class="flex items-center justify-center gap-2">
+        <authentication-section class="authentication"/>
         <button class="btn btn-new-wallet" @click="">+ Nueva cartera</button>
       </div>
     </template>
@@ -106,7 +130,15 @@ img{
   color: #27AE60;
   text-decoration: underline ;
 }
-
+.flex {
+  display: flex;
+}
+.items-center {
+  align-items: center;
+}
+.justify-center {
+  justify-content: center;
+}
 
 @media (max-width: 950px) {
   .btn-new-wallet {

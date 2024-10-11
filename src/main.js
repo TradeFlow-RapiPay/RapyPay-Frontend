@@ -49,9 +49,9 @@ createApp(App)
                 },
         ripple : true})
     .use(router)
-    /*.use(createPinia())
+    .use(createPinia())
     .use(ConfirmationService)
-    .use(ToastService)*/
+    .use(ToastService)
     .component('pv-input-text', InputText)
     .component('pv-float-label', FloatLabel)
     .component('pv-textarea', Textarea)
