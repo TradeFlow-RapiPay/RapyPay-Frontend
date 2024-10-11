@@ -86,4 +86,34 @@ h1{
 .table-body td:nth-child(3) {
   text-align: center;
 }
+
+@media (max-width: 768px) {
+  .p-datatable {
+    margin: 2em;
+    font-size: 18px;
+  }
+  h1 {
+    font-size: 2em;
+  }
+  .table-header th,
+  .table-body td {
+    padding: 5px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .p-datatable {
+    margin: 1em;
+    font-size: 16px;
+  }
+  h1 {
+    font-size: 1.5em;
+  }
+  .table-header th,
+  .table-body td {
+    padding: 3px;
+    font-size: 14px;
+  }
+}
 </style>

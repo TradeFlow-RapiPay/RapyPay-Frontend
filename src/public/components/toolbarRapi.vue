@@ -36,18 +36,20 @@ export default {
     </template>
     <template #center>
       <pv-menubar class="menu-bar-items" :model="items">
-        <template v-slot:item="slotProps">
+        <template class="flex items-center" v-slot:item="slotProps">
           <li :class="{'selected-item': selectedItem === slotProps.item.label}">
             <a @click="slotProps.item.command">
               <i :class="slotProps.item.icon"></i>
-              <span>{{ slotProps.item.label }}</span>
+              <span class="label-item">{{ slotProps.item.label }}</span>
             </a>
           </li>
         </template>
       </pv-menubar>
     </template>
     <template #end>
-      <button class="btn btn-new-wallet" @click="">+ Nueva cartera</button>
+      <div class="flex items-center gap-2">
+        <button class="btn btn-new-wallet" @click="">+ Nueva cartera</button>
+      </div>
     </template>
   </pv-toolbar>
 </template>
@@ -58,6 +60,7 @@ img{
   width: 80px;
   height: fit-content;
 }
+
 .toolbar-component {
   background-color: rgba(44, 62, 80, 0.1);
   padding: 0;
@@ -77,18 +80,44 @@ img{
   cursor: pointer;
   border-radius: 20px;
 }
+.btn-new-wallet:hover {
+  background-color: #2cdc78;
+}
+
 .menu-bar-items{
-  margin-left: auto;
   font-size: 24px;
   color: #2C3E50;
   padding: 0.6em;
+  background-color: rgba(126, 137, 64, 0);
+  border: none;
+  display: flex;
+  align-items: center;
+  width: auto !important;
 }
 .menu-bar-items li {
   cursor: pointer;
-  padding: 0.5em;
+  padding: 0.7em;
+  border-radius: 2em;
+}
+.menu-bar-items span {
+  padding: 0.7em;
 }
 .selected-item {
   color: #27AE60;
   text-decoration: underline ;
+}
+
+
+@media (max-width: 950px) {
+  .btn-new-wallet {
+    font-size: 18px;
+  }
+  img {
+    width: 60px;
+  }
+  .label-item{
+    display: none;
+  }
+
 }
 </style>

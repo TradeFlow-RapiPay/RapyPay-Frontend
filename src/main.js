@@ -8,6 +8,9 @@ import 'primeicons/primeicons.css';
 
 // PrimeVue Material Design Theme
 import router from "@/router/index.js";
+import Aura from '@primevue/themes/aura';
+import Lara from '@primevue/themes/aura';
+import Nora from '@primevue/themes/aura';
 
 import App from './app.vue'
 
@@ -35,7 +38,16 @@ import Dialog from "primevue/dialog";
 
 
 createApp(App)
-    .use(PrimeVue, { ripple : true})
+    .use(PrimeVue,
+        {
+            theme:
+                {
+                    preset: Nora,
+                    options: {
+                        darkModeSelector: false
+                    }
+                },
+        ripple : true})
     .use(router)
     /*.use(createPinia())
     .use(ConfirmationService)
