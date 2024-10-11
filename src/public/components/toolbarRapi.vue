@@ -32,7 +32,7 @@ export default {
 <template>
   <pv-toolbar class="toolbar-component">
     <template #start>
-      <img src="https://github.com/user-attachments/assets/6c4d80f9-13bf-4c64-993c-34c76f5ef014" alt="logo-RapiPay" />
+      <img src="https://github.com/user-attachments/assets/5afe8540-75c5-467d-ae79-e92e936e8beb" alt="logo-RapiPay" />
     </template>
     <template #center>
       <pv-menubar class="menu-bar-items" :model="items">

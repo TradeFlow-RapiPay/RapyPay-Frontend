@@ -5,6 +5,7 @@ import PrimeVue from 'primevue/config';
 import 'primeflex/primeflex.css';
 import 'primeicons/primeicons.css';
 
+
 // PrimeVue Material Design Theme
 import router from "@/router/index.js";
 
@@ -34,7 +35,7 @@ import Dialog from "primevue/dialog";
 
 
 createApp(App)
-    .use(PrimeVue, { ripple : true })
+    .use(PrimeVue, { ripple : true})
     .use(router)
     /*.use(createPinia())
     .use(ConfirmationService)
