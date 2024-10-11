@@ -18,7 +18,12 @@ export default {
     async fetchBanks() {
       try {
         const response= await this.bankApiService.getAll();
-        this.banks = response.data.map(bankData => new Bank(bankData.id, bankData.imdbId, bankData.bankName, bankData.tea, bankData.tcea, bankData.additionalInfo));
+        this.banks = response.data.map(bankData => new Bank(
+            bankData.id,
+            bankData.bankName,
+            bankData.tea,
+            bankData.tcea,
+            bankData.additionalInfo));
       } catch (error) {
         console.error("Error fetching banks:", error);
       }
