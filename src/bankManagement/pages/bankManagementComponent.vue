@@ -20,6 +20,7 @@ export default {
         const response= await this.bankApiService.getAll();
         this.banks = response.data.map(bankData => new Bank(
             bankData.id,
+            bankData.imdbId,
             bankData.bankName,
             bankData.tea,
             bankData.tcea,
