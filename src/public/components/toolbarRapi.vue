@@ -70,8 +70,8 @@ export default {
       </pv-menubar>
     </template>
     <template #end>
-      <div class="flex items-center justify-center gap-2">
-        <authentication-section class="authentication"/>
+      <authentication-section class="authentication"/>
+      <div class="flex items-center justify-center ">
         <button class="btn btn-new-wallet" @click="">+ Nueva cartera</button>
       </div>
     </template>

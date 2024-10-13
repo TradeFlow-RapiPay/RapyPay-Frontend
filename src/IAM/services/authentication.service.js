@@ -1,4 +1,4 @@
-import http from "@/walletManagement/services/services/http-common.js";
+import http from "@/shared/services/http-common.js";
 
 export class AuthenticationService {
     signIn(signInRequest) {

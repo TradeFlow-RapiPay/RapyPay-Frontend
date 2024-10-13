@@ -35,6 +35,7 @@ import Divider from "primevue/divider";
 import Dropdown from "primevue/dropdown";
 import Calendar from "primevue/calendar";
 import Dialog from "primevue/dialog";
+import Toast from "primevue/toast";
 
 
 createApp(App)
@@ -70,4 +71,5 @@ createApp(App)
     .component('pv-dropdown',Dropdown)
     .component('pv-calendar',Calendar)
     .component('pv-dialog',Dialog)
+    .component('pv-toast', Toast)
     .mount('#app')

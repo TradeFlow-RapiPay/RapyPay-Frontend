@@ -23,7 +23,7 @@ export default {
       if (this.username && this.password) {
         let signUpRequest = new SignUpRequest(this.username, this.password,);
         console.log(signUpRequest);
-        this.authenticationStore.signUp(signUpRequest, this.$router);
+        this.authenticationStore.signUp(signUpRequest, this.$router, this.$toast);
       }
     }
   }
@@ -64,6 +64,7 @@ export default {
           </div>
         </div>
       </form>
+    <pv-toast />
   </div>
 </template>
 
