@@ -17,17 +17,13 @@ export const useAuthenticationStore = defineStore( {
     actions: {
         async signIn(signInRequest, router) {
             try {
-                console.log('state1', signInRequest);
                 const response = await authenticationService.signIn(signInRequest);
-                console.log('state2', signInRequest);
                 let signInResponse = new SignInResponse(response.data.id, response.data.username, response.data.token);
                 this.signedIn = true;
                 this.userId = signInResponse.id;
                 this.username = signInResponse.username;
-                console.log('state3', signInRequest);
                 localStorage.setItem('token', signInResponse.token);
-                console.log(signInResponse);
-                router.push({name: 'my-account'});
+                router.push({name: 'my-wallets'});
             } catch (error) {
                 router.push({name: 'sign-in'});
             }

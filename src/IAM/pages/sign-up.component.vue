@@ -11,6 +11,7 @@ export default {
       authenticationService: null,
       username: "",
       password: "",
+      submitted: false
     };
   },
   created() {
@@ -18,34 +19,37 @@ export default {
   },
   methods: {
     onSignUp() {
-      let signUpRequest = new SignUpRequest(this.username, this.password,);
-      console.log(signUpRequest);
-      this.authenticationStore.signUp(signUpRequest, this.$router);
-
+      this.submitted = true;
+      if (this.username && this.password) {
+        let signUpRequest = new SignUpRequest(this.username, this.password,);
+        console.log(signUpRequest);
+        this.authenticationStore.signUp(signUpRequest, this.$router);
+      }
     }
   }
 }
 </script>
 
 <template>
-  <img src="https://github.com/user-attachments/assets/6c4d80f9-13bf-4c64-993c-34c76f5ef014" alt="logo-RapiPay" />
   <div class="container">
     <div class="signup">
+      <img src="https://github.com/user-attachments/assets/5afe8540-75c5-467d-ae79-e92e936e8beb" alt="logo-RapiPay" />
       <h2 class="title">Registrate!</h2>
+    </div>
       <form @submit.prevent="onSignUp">
-        <div>
-          <div>
+        <div class="p-fluid">
+          <div class="field mt-5">
             <pv-float-label>
               <label class="label-input" for="username">Usuario</label>
-              <pv-input-text class="input" id="username" v-model="username" :class="{'p-invalid': !username}"/>
-              <small v-if="!username" class="p-invalid">Nombre de usuario es requerido</small>
+              <pv-input-text class="input" id="username" v-model="username" :class="{'p-invalid': submitted && !username}"/>
+              <small v-if="submitted && !username" class="p-invalid">Username es requerido.</small>
             </pv-float-label>
           </div>
-          <div>
+          <div class="field mt-5">
             <pv-float-label>
               <label class="label-input"  for="password">Contraseña</label>
-              <pv-input-text class="input" id="password" v-model="password" :class="{'p-invalid': !password}" type="password"/>
-              <small v-if="!password" class="p-invalid">Contraseña es requerida</small>
+              <pv-input-text class="input" id="password" v-model="password" :class="{'p-invalid': submitted && !password}" type="password"/>
+              <small v-if="submitted && !password" class="p-invalid">Contraseña es requerida</small>
             </pv-float-label>
           </div>
           <div class="registration-question">
@@ -55,12 +59,11 @@ export default {
               </router-link>
             </a>
           </div>
-          <div>
+          <div class="button-container">
             <pv-button class="btn-register" type="submit">Registrar</pv-button>
           </div>
         </div>
       </form>
-    </div>
   </div>
 </template>
 
@@ -71,11 +74,10 @@ img{
   height: fit-content;
 }
 .container {
-  margin-top: 3em;
   display: flex;
-  justify-content: center;
-  height: 100vh;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 .signup {
   text-align: center;
@@ -86,14 +88,14 @@ img{
 .signup .title {
   font-size: 32px;
   margin-bottom: 20px;
-  color: #8BB500D6;
+  color: #27AE60;
 }
 .route-to-registration {
   text-decoration: none;
-  color: #95a53a;
+  color: #27AE60;
 }
-.input {
-  width: 100% !important;
+.input, .p-invalid {
+  width: 387.4px !important;
   height: 3em;
   border-radius: 5px;
 }
@@ -112,7 +114,7 @@ pv-password {
   width: 100% !important;
 }
 .btn-register {
-  background-color: #C5D951FF;
+  background-color: #27AE60;
   margin-top: 1.5em;
   color: #fff;
   font-size: 18px;
@@ -123,8 +125,12 @@ pv-password {
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 .btn-register:hover {
-  background-color: #8BB500D6;
+  background-color: #27AE60;
   transform: scale(1.1);
+}
+.button-container {
+  display: flex;
+  justify-content: center;
 }
 @media screen and (max-width: 768px) {
   .signup {
