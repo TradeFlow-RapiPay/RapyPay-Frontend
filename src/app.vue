@@ -1,10 +1,10 @@
 <script>
-  import ToolbarRapi from "@/public/components/toolbarRapi.vue";
+import ToolbarRapi from "@/public/components/toolbarRapi.vue";
 
-  export default {
-    name: "app.vue",
-    components: {ToolbarRapi}
-  }
+export default {
+  name: "app.vue",
+  components: { ToolbarRapi }
+}
 </script>
 
 <template>
@@ -14,6 +14,4 @@
 </template>
 
 <style scoped>
-
-
 </style>

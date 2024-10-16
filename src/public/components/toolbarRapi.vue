@@ -3,7 +3,7 @@ import AuthenticationSection from "@/IAM/components/authentication-sector.vue";
 
 export default {
   name: "ToolbarRapi",
-  components: {AuthenticationSection},
+  components: { AuthenticationSection },
   data() {
     return {
       selectedItem: null,
@@ -44,6 +44,9 @@ export default {
       } else if (routeName === 'sign-in' || routeName === 'sign-up') {
         this.selectedItem = null;
       }
+    },
+    showNewWalletCard() {
+      this.$emit('show-new-wallet-card');
     }
   },
   created() {
@@ -55,7 +58,7 @@ export default {
 <template>
   <pv-toolbar class="toolbar-component">
     <template #start>
-      <img src="https://github.com/user-attachments/assets/5afe8540-75c5-467d-ae79-e92e936e8beb" alt="logo-RapiPay" />
+      <img src="https://github.com/user-attachments/assets/5afe8540-75c5-467d-ae79-e92e936e8beb" alt="logo-RapiPay"/>
     </template>
     <template #center>
       <pv-menubar class="menu-bar-items" :model="items">
@@ -72,14 +75,13 @@ export default {
     <template #end>
       <authentication-section class="authentication"/>
       <div class="flex items-center justify-center ">
-        <button class="btn btn-new-wallet" @click="">+ Nueva cartera</button>
       </div>
     </template>
   </pv-toolbar>
 </template>
 
 <style scoped>
-img{
+img {
   margin: 1em;
   width: 80px;
   height: fit-content;
@@ -90,7 +92,8 @@ img{
   padding: 0;
   margin: 0;
 }
-.btn-new-wallet{
+
+.btn-new-wallet {
   background-color: #27AE60;
   color: white;
   border: none;
@@ -104,11 +107,12 @@ img{
   cursor: pointer;
   border-radius: 20px;
 }
+
 .btn-new-wallet:hover {
   background-color: #2cdc78;
 }
 
-.menu-bar-items{
+.menu-bar-items {
   font-size: 24px;
   color: #2C3E50;
   padding: 0.6em;
@@ -118,24 +122,30 @@ img{
   align-items: center;
   width: auto !important;
 }
+
 .menu-bar-items li {
   cursor: pointer;
   padding: 0.7em;
   border-radius: 2em;
 }
+
 .menu-bar-items span {
   padding: 0.7em;
 }
+
 .selected-item {
   color: #27AE60;
-  text-decoration: underline ;
+  text-decoration: underline;
 }
+
 .flex {
   display: flex;
 }
+
 .items-center {
   align-items: center;
 }
+
 .justify-center {
   justify-content: center;
 }
@@ -144,12 +154,13 @@ img{
   .btn-new-wallet {
     font-size: 18px;
   }
+
   img {
     width: 60px;
   }
-  .label-item{
+
+  .label-item {
     display: none;
   }
-
 }
 </style>
