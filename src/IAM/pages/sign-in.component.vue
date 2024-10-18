@@ -17,7 +17,7 @@ export default {
       if (this.username && this.password) {
         let authenticationStore = useAuthenticationStore();
         let signInRequest = new SignInRequest(this.username, this.password);
-        authenticationStore.signIn(signInRequest, this.$router);
+        authenticationStore.signIn(signInRequest, this.$router, this.$toast);
       }
     }
   }

@@ -51,12 +51,19 @@ export default {
     },
     async createWallet() {
       try {
+        // Transformar la fecha al formato DD-MM-YYYY
+        const [year, month, day] = this.newWallet.closingDate.split('-');
+        const formattedDate = `${day}-${month}-${year}`;
+
         const response = await this.walletApiService.postWallet({
           walletName: this.newWallet.walletName,
           bank: this.newWallet.bank,
           description: this.newWallet.description,
-          closingDate: this.newWallet.closingDate
+          closingDate: formattedDate, // Usar la fecha formateada
+          totalDiscount: this.newWallet.totalDiscount,
+          totalNetValue: this.newWallet.totalNetValue
         });
+
         const bank = this.banks.find(b => b.id === response.data.bank);
         this.wallets.push({
           ...response.data,

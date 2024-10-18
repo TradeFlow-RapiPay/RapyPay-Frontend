@@ -34,7 +34,6 @@ export default {
     },
     async fetchWalletDetails() {
       try {
-        await this.walletApiService.calculateAndUpdateWallet(this.walletId);
         const walletResponse = await this.walletApiService.getWalletById(this.walletId);
         const wallet = walletResponse.data;
 
@@ -57,7 +56,20 @@ export default {
     async createBill() {
       try {
         this.newBill.walletId = this.walletId;
-        const response = await this.billApiService.postBill(this.walletId, this.newBill);
+
+        // Transformar las fechas al formato DD-MM-YYYY
+        const [emissionYear, emissionMonth, emissionDay] = this.newBill.emissionDate.split('-');
+        const formattedEmissionDate = `${emissionDay}-${emissionMonth}-${emissionYear}`;
+
+        const [dueYear, dueMonth, dueDay] = this.newBill.dueDate.split('-');
+        const formattedDueDate = `${dueDay}-${dueMonth}-${dueYear}`;
+
+        const response = await this.billApiService.postBill(this.walletId, {
+          ...this.newBill,
+          emissionDate: formattedEmissionDate,
+          dueDate: formattedDueDate
+        });
+
         this.bills.push(response.data);
         this.newBill = new Bill();
         this.showNewBillCard = false;
@@ -119,7 +131,7 @@ export default {
       <h2>Detalles Cartera</h2>
       <p>Nombre: {{ walletDetails.walletName }}</p>
       <p>ID: {{ walletDetails.id }}</p>
-      <p>Cant. Facturas: {{ walletDetails.billsList.length }}</p>
+      <p>Cant. Facturas: {{ walletDetails.billsList ? walletDetails.billsList.length : 0 }}</p>
       <p>Tasa: {{ walletDetails.tea }}</p>
       <p>Porcentaje: {{ calculatePercentage(walletDetails) }}</p>
       <p>Fecha de cierre: {{ walletDetails.closingDate }}</p>
@@ -130,7 +142,6 @@ export default {
 </template>
 
 <style scoped>
-
 .wallet-details-card {
   background-color: #f8f9fa;
   border-radius: 1em;
@@ -216,6 +227,4 @@ input {
 .bill-card p {
   margin: 0.5em 0;
 }
-
-
 </style>

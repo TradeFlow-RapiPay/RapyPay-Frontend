@@ -15,7 +15,7 @@ export const useAuthenticationStore = defineStore({
         currentToken: () => localStorage.getItem('token')
     },
     actions: {
-        async signIn(signInRequest, router) {
+        async signIn(signInRequest, router, toast) {
             try {
                 const response = await authenticationService.signIn(signInRequest);
                 let signInResponse = new SignInResponse(response.data.userId, response.data.username, response.data.token);
@@ -24,8 +24,11 @@ export const useAuthenticationStore = defineStore({
                 this.userId = signInResponse.userId;
                 this.username = signInResponse.username;
                 localStorage.setItem('token', signInResponse.token);
+                toast.add({ severity: 'success', Success: 'Success', detail: 'Log in successful' , life: 3000,});
+
                 router.push({ name: 'my-wallets' });
             } catch (error) {
+                toast.add({ severity: 'error', summary: 'Error', detail: 'User already exists' , life: 3000,});
                 router.push({ name: 'sign-in' });
             }
         },
