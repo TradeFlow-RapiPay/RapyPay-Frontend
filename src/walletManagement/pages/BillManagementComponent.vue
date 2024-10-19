@@ -93,31 +93,39 @@ export default {
 
 <template>
   <div>
-    <h1>Facturas de la Cartera</h1>
-    <button @click="toggleNewBillCard">+ Nueva Factura</button>
-    <div v-if="showNewBillCard" class="new-bill-card">
-      <h2>Registrar nueva factura</h2>
-      <form @submit.prevent="createBill">
-        <div>
-          <label for="billNumber">Número de factura:</label>
-          <input v-model="newBill.billNumber" id="billNumber" required/>
-        </div>
-        <div>
-          <label for="netValue">Valor neto:</label>
-          <input v-model="newBill.netValue" id="netValue" required/>
-        </div>
-        <div>
-          <label for="emissionDate">Fecha de emisión:</label>
-          <input type="date" v-model="newBill.emissionDate" id="emissionDate" required/>
-        </div>
-        <div>
-          <label for="dueDate">Fecha de vencimiento:</label>
-          <input type="date" v-model="newBill.dueDate" id="dueDate" required/>
-        </div>
-        <button type="submit">Guardar</button>
-        <button type="button" @click="cancelCreation">Cancelar</button>
-      </form>
-      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+    <h1>Cartera {{ walletDetails.walletName }}</h1>
+    <div class="sub-titulo">
+      <span>ID: {{ walletDetails.id }}</span>
+    </div>
+    <div class="div-bill-btn">
+      <button class="new-bill-btn" @click="toggleNewBillCard">+ Nueva Factura</button>
+    </div>
+    <div class="parent-container">
+      <div v-if="showNewBillCard" class="new-bill-card">
+        <h2>Registrar nueva factura</h2>
+        <form @submit.prevent="createBill">
+          <div>
+            <label for="billNumber">Número de factura:</label>
+            <input v-model="newBill.billNumber" id="billNumber" required/>
+          </div>
+          <div>
+            <label for="netValue">Valor neto:</label>
+            <input v-model="newBill.netValue" id="netValue" required/>
+          </div>
+          <div>
+            <label for="emissionDate">Fecha de emisión:</label>
+            <input type="date" v-model="newBill.emissionDate" id="emissionDate" required/>
+          </div>
+          <div>
+            <label for="dueDate">Fecha de vencimiento:</label>
+            <input type="date" v-model="newBill.dueDate" id="dueDate" required/>
+          </div>
+          <button class="btn-save" type="submit">Guardar</button>
+          <button class="btn-cancel" type="button" @click="cancelCreation">Cancelar</button>
+        </form>
+        <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+      </div>
+
     </div>
     <div class="bill-cards">
       <div v-for="bill in bills" :key="bill.id" class="bill-card">
@@ -129,8 +137,6 @@ export default {
     </div>
     <div v-if="walletDetails" class="wallet-details-card">
       <h2>Detalles Cartera</h2>
-      <p>Nombre: {{ walletDetails.walletName }}</p>
-      <p>ID: {{ walletDetails.id }}</p>
       <p>Cant. Facturas: {{ walletDetails.billsList ? walletDetails.billsList.length : 0 }}</p>
       <p>Tasa: {{ walletDetails.tea }}</p>
       <p>Porcentaje: {{ calculatePercentage(walletDetails) }}</p>
@@ -142,12 +148,25 @@ export default {
 </template>
 
 <style scoped>
-.wallet-details-card {
+.new-bill-card {
   background-color: #f8f9fa;
   border-radius: 1em;
   padding: 1em;
-  margin-top: 2em;
+  margin-top: 3em;
+  width: 40%;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.parent-container {
+  display: flex;
+  justify-content: center;
+}
+.div-bill-btn{
+  display: flex;
+  justify-content: left;
+  margin-right: 2em;
 }
 
 h1 {
@@ -155,31 +174,51 @@ h1 {
   font-size: 3em;
   margin-top: 2em;
 }
-
-button {
-  background-color: #27AE60;
-  color: white;
-  border: none;
-  padding: 10px 20px;
+.sub-titulo{
+  align-items: center;
   text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 24px;
-  font-family: 'Ubuntu', sans-serif;
-  margin: 1em;
-  cursor: pointer;
-  border-radius: 20px;
 }
 
-button:hover {
+.btn-save, .new-bill-btn {
+  background-color: #27AE60;
+  color: #fff;
+  font-size: 18px;
+  border: none;
+  border-radius: 2em;
+  padding: 15px 30px;
+  cursor: pointer;
+  margin-right: 1em;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-save:hover {
   background-color: #2cdc78;
+}
+.btn-cancel {
+  background-color: rgba(239, 82, 82, 0.65);
+  color: #fff;
+  font-size: 18px;
+  border: none;
+  border-radius: 2em;
+  padding: 15px 30px;
+  cursor: pointer;
+  margin-right: 1em;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-cancel:hover {
+  background-color: firebrick;
+}
+
+.new-bill-btn {
+  margin-left: auto;
 }
 
 .new-bill-card {
   background-color: #f8f9fa;
   border-radius: 1.5em;
   padding: 1em;
-  margin: 2em;
+  margin: 3em;
 }
 
 form div {
@@ -208,6 +247,7 @@ input {
   flex-wrap: wrap;
   gap: 2em;
   justify-content: center;
+  margin:2em;
 }
 
 .bill-card {
@@ -226,5 +266,8 @@ input {
 
 .bill-card p {
   margin: 0.5em 0;
+}
+.wallet-details-card{
+  margin: 2em ;
 }
 </style>

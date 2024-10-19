@@ -73,3 +73,5 @@ createApp(App)
     .component('pv-dialog',Dialog)
     .component('pv-toast', Toast)
     .mount('#app')
+
+export default App;

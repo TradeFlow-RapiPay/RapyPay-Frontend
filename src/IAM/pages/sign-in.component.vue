@@ -48,7 +48,7 @@ export default {
         </div>
         <div class="registration-question">
           <router-link style="text-decoration: none !important;" :to="{ path: '/sign-up' }">
-            <span class="route-to-registration">No tengo una cuenta</span>
+            <span class="text-registro">¿No tienes una cuenta aún?</span> <span class="route-to-registration">Crear cuenta</span>
           </router-link>
         </div>
       </div>
@@ -65,11 +65,15 @@ img{
   width: 80px;
   height: fit-content;
 }
+.text-registro{
+  color: #666;
+}
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-top: 4em;
 }
 .login {
   text-align: center;
@@ -93,7 +97,7 @@ img{
 .input, .p-invalid {
   width: 387.4px !important;
   height: 3em;
-  border-radius: 5px;
+  border-radius: 1.6em;
 }
 .label-input {
   color: #666;

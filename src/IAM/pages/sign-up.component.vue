@@ -55,7 +55,7 @@ export default {
           <div class="registration-question">
             <a>
               <router-link style="text-decoration: none !important;" :to="{ path: '/login' }">
-                <span class="route-to-registration">Tengo una cuenta</span>
+                <span class="text-iniciosesion">Ya tengo una cuenta</span> <span class="route-to-registration">Iniciar sesión</span>
               </router-link>
             </a>
           </div>
@@ -74,11 +74,16 @@ img{
   width: 80px;
   height: fit-content;
 }
+.text-iniciosesion{
+  color: #666;
+}
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-top: 4em;
+
 }
 .signup {
   text-align: center;
@@ -98,7 +103,7 @@ img{
 .input, .p-invalid {
   width: 387.4px !important;
   height: 3em;
-  border-radius: 5px;
+  border-radius: 1.6em;
 }
 .label-input {
   color: #666;

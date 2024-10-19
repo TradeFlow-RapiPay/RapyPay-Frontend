@@ -63,7 +63,7 @@ export default {
     <template #center>
       <pv-menubar class="menu-bar-items" :model="items">
         <template class="flex items-center" v-slot:item="slotProps">
-          <li :class="{'selected-item': selectedItem === slotProps.item.label}">
+          <li :class="['items-toolbar',{'selected-item': selectedItem === slotProps.item.label}]">
             <a @click="slotProps.item.command">
               <i :class="slotProps.item.icon"></i>
               <span class="label-item">{{ slotProps.item.label }}</span>
@@ -74,8 +74,6 @@ export default {
     </template>
     <template #end>
       <authentication-section class="authentication"/>
-      <div class="flex items-center justify-center ">
-      </div>
     </template>
   </pv-toolbar>
 </template>
@@ -91,25 +89,6 @@ img {
   background-color: rgba(44, 62, 80, 0.1);
   padding: 0;
   margin: 0;
-}
-
-.btn-new-wallet {
-  background-color: #27AE60;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 24px;
-  font-family: 'Ubuntu', sans-serif;
-  margin: 1em;
-  cursor: pointer;
-  border-radius: 20px;
-}
-
-.btn-new-wallet:hover {
-  background-color: #2cdc78;
 }
 
 .menu-bar-items {
@@ -133,22 +112,20 @@ img {
   padding: 0.7em;
 }
 
-.selected-item {
-  color: #27AE60;
-  text-decoration: underline;
+
+.authentication{
+  background-color: rgba(44, 62, 80, 0);
 }
 
 .flex {
   display: flex;
 }
 
-.items-center {
-  align-items: center;
+.items-toolbar {
+  margin-left: 3em;
 }
 
-.justify-center {
-  justify-content: center;
-}
+
 
 @media (max-width: 950px) {
   .btn-new-wallet {
