@@ -22,7 +22,7 @@ export default {
   },
   created() {
     this.fetchBills();
-    this.fetchWalletDetails(this.walletId);
+    this.fetchWalletDetails();
   },
   computed: {
     currentUserId() {
@@ -39,19 +39,24 @@ export default {
         console.error("Error fetching bills:", error);
       }
     },
-    async fetchWalletDetails(walletId) {
-        try {
-          const response = await this.walletApiService.getWalletById(walletId);
-          this.walletDetails = response.data;
-          await this.walletApiService.calculate(walletId);
-        } catch (error) {
-          console.error("Error fetching wallet details:", error);
-          if (error.response && error.response.status === 403) {
-            this.errorMessage = 'You do not have permission to access this wallet.';
-          } else {
-            this.errorMessage = 'An error occurred while fetching wallet details.';
-          }
-        }
+    async fetchWalletDetails() {
+      try {
+        await this.walletApiService.calculate(this.walletId);
+        const walletResponse = await this.walletApiService.getWalletById(this.walletId);
+        const wallet = walletResponse.data;
+
+        const bankResponse = await this.bankApiService.getBankById(wallet.bank);
+        const bank = bankResponse.data;
+
+        this.walletDetails = {
+          ...wallet,
+          bankName: bank ? bank.bankName : "Unknown Bank",
+          tea: bank ? bank.tea : 0
+        };
+      } catch (error) {
+        console.error("Error fetching wallet details:", error);
+        this.errorMessage = 'Error fetching wallet details';
+      }
     },
     toggleNewBillCard() {
       this.showNewBillCard = !this.showNewBillCard;
@@ -66,7 +71,7 @@ export default {
         const [dueYear, dueMonth, dueDay] = this.newBill.dueDate.split('-');
         const formattedDueDate = `${dueDay}-${dueMonth}-${dueYear}`;
 
-        const response = await this.billApiService.postBill(this.walletId, userId,{
+        const response = await this.billApiService.postBill(this.walletId, userId, {
           ...this.newBill,
           emissionDate: formattedEmissionDate,
           dueDate: formattedDueDate,
@@ -86,17 +91,17 @@ export default {
       this.showNewBillCard = false;
       this.errorMessage = '';
     },
+    calculatePercentage(wallet) {
+      return (wallet.totalDiscount / wallet.totalNetValue) * 100;
+    },
     async deleteWallet(walletId) {
       try {
         await this.walletApiService.deleteWallet(walletId);
-        this.$router.push({ name: 'wallet-management' });
+        this.$router.push({name: 'wallet-management'});
       } catch (error) {
         console.error("Error deleting wallet:", error);
         this.errorMessage = 'An error occurred while deleting the wallet.';
       }
-    },
-    calculatePercentage(wallet) {
-      return (wallet.totalDiscount / wallet.totalNetValue) * 100;
     },
     async deleteBill(billId) {
       try {
@@ -110,10 +115,11 @@ export default {
   }
 };
 </script>
+
 <template>
   <div>
-    <h1 v-if="walletDetails">Cartera {{ walletDetails.walletName }}</h1>
-    <div v-if="walletDetails" class="sub-titulo">
+    <h1>Cartera {{ walletDetails.walletName }}</h1>
+    <div class="sub-titulo">
       <span>ID: {{ walletDetails.id }}</span>
     </div>
     <div class="div-bill-btn">
@@ -155,6 +161,7 @@ export default {
         </form>
         <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
       </div>
+
     </div>
     <div class="bill-cards">
       <div v-for="bill in bills" :key="bill.id" class="bill-card">
@@ -219,7 +226,7 @@ h1 {
   font-size: 18px;
   border: none;
   border-radius: 2em;
-  padding: 10px 20px;
+  padding: 15px 30px;
   cursor: pointer;
   margin-right: 1em;
   transition: background-color 0.3s ease, transform 0.3s ease;
@@ -228,13 +235,13 @@ h1 {
 .btn-save:hover {
   background-color: #2cdc78;
 }
-.btn-cancel,.delete-wallet-btn {
+.btn-cancel {
   background-color: rgba(239, 82, 82, 0.65);
   color: #fff;
   font-size: 18px;
   border: none;
   border-radius: 2em;
-  padding: 10px 20px;
+  padding: 15px 30px;
   cursor: pointer;
   margin-right: 1em;
   transition: background-color 0.3s ease, transform 0.3s ease;
@@ -264,7 +271,7 @@ label {
   margin-bottom: 0.5em;
 }
 
-input, select {
+input, select{
   width: 100%;
   padding: 0.5em;
   border: 1px solid #ccc;

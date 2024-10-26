@@ -63,7 +63,7 @@ export default {
         const formattedDate = `${day}-${month}-${year}`;
         const userId = this.currentUserId
         console.log(userId)
-        const response = await this.walletApiService.postWallet(userId,{
+        const response = await this.walletApiService.postWallet(userId, {
           walletName: this.newWallet.walletName,
           bank: this.newWallet.bank,
           description: this.newWallet.description,
@@ -177,7 +177,8 @@ button {
 button:hover {
   background-color: #2cdc78;
 }
-.delete-wallet-btn{
+
+.delete-wallet-btn {
   margin-left: 90%;
   cursor: pointer;
   background-color: rgba(39, 174, 96, 0);
