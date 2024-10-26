@@ -226,7 +226,7 @@ h1 {
   font-size: 18px;
   border: none;
   border-radius: 2em;
-  padding: 15px 30px;
+  padding: 10px 20px;
   cursor: pointer;
   margin-right: 1em;
   transition: background-color 0.3s ease, transform 0.3s ease;
@@ -235,13 +235,13 @@ h1 {
 .btn-save:hover {
   background-color: #2cdc78;
 }
-.btn-cancel {
+.btn-cancel,.delete-wallet-btn {
   background-color: rgba(239, 82, 82, 0.65);
   color: #fff;
   font-size: 18px;
   border: none;
   border-radius: 2em;
-  padding: 15px 30px;
+  padding: 10px 20px;
   cursor: pointer;
   margin-right: 1em;
   transition: background-color 0.3s ease, transform 0.3s ease;
