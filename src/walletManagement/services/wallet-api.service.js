@@ -27,22 +27,8 @@ export class WalletApiService {
     getWalletById(id){
         return http.get(`/wallet/${id}`);
     }
-
-    //para bill(factura)
-    postBill(billData) {
-        return http.post('/bill/insert', billData);
-    }
-    updateBill(id, billData) {
-        return http.put(`/bill/update/${id}`, billData);
-    }
-    deleteBill(id) {
-        return http.delete(`/bill/delete/${id}`);
-    }
-    getBillById(id){
-        return http.get(`/bill/${id}`);
-    }
-    getAllBill(){
-        return http.get('/bill/findAll');
+    getWalletByUserId(userId){
+        return http.get(`/wallet/user/${userId}`);
     }
 
 

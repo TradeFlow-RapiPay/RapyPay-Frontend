@@ -2,10 +2,17 @@
 import { WalletApiService } from "@/walletManagement/services/wallet-api.service.js";
 import { Wallet } from "@/walletManagement/model/wallet.entity.js";
 import { BankApiService } from "@/bankManagement/services/bank-api.service.js";
+import {useAuthenticationStore} from "@/IAM/services/authentication.store.js";
 
 export default {
   name: "walletManagementComponent",
   title: 'Wallet Management',
+  computed: {
+    currentUserId() {
+      const authStore = useAuthenticationStore();
+      return authStore.getCurrentUserId;
+    }
+  },
   data() {
     return {
       showNewWalletCard: false,
@@ -33,7 +40,8 @@ export default {
     },
     async fetchWallets() {
       try {
-        const response = await this.walletApiService.getAllWallet();
+        const userId = this.currentUserId;
+        const response = await this.walletApiService.getWalletByUserId(userId);
         this.wallets = await Promise.all(response.data.map(async wallet => {
           const bankResponse = await this.bankApiService.getBankById(wallet.bank);
           const bank = bankResponse.data;
@@ -128,6 +136,7 @@ export default {
         <h3>{{ wallet.walletName }}</h3>
         <p>ID: {{ wallet.id }}</p>
         <p>Banco: {{ wallet.bankName }}</p>
+        <p>TCEA: {{ wallet.tcea }}</p>
         <p>Fecha de cierre: {{ wallet.closingDate }}</p>
       </div>
     </div>

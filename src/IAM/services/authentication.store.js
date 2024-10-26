@@ -7,14 +7,18 @@ const authenticationService = new AuthenticationService();
 
 export const useAuthenticationStore = defineStore({
     id: 'authentication',
-    state: () => ({ signedIn: false, userId: 0, userName: '' }),
+    state: () => ({ signedIn: false, userId: 0, userName: '', currentUserId: null,}),
     getters: {
         isSignedIn: (state) => state["signedIn"],
         currentUserId: state => state["userId"],
+        getCurrentUserId: (state) => state.currentUserId,
         currentUsername: state => state["username"],
         currentToken: () => localStorage.getItem('token')
     },
     actions: {
+        setCurrentUserId(userId) {
+            this.currentUserId = userId;
+        },
         async signIn(signInRequest, router, toast) {
             try {
                 const response = await authenticationService.signIn(signInRequest);

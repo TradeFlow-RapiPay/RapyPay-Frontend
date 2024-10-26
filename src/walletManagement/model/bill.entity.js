@@ -1,6 +1,8 @@
 export class Bill {
-    constructor(billNumber = '', netValue = 0, emissionDate = '', dueDate = '', walletId = '') {
+    constructor(billNumber = '', addressee='',billType='',netValue = 0, emissionDate = '', dueDate = '', walletId = '') {
         this.billNumber = billNumber;
+        this.addressee= addressee;
+        this.billType=billType;
         this.netValue = netValue;
         this.emissionDate = emissionDate;
         this.dueDate = dueDate;

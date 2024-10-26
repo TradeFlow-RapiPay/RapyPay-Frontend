@@ -21,10 +21,6 @@ export class BillApiService {
         return http.delete(`/bill/delete/${id}`, { headers: this.getAuthHeaders() });
     }
 
-    getBillsByUserId(userId) {
-        return http.get(`/bill/user/${userId}`, { headers: this.getAuthHeaders() });
-    }
-
     getBillsByWalletId(walletId) {
         return http.get(`/bill/wallet/${walletId}`, { headers: this.getAuthHeaders() });
     }
