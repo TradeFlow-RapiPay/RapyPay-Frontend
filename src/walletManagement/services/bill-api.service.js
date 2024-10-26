@@ -9,8 +9,8 @@ export class BillApiService {
         return http.get(`/bill/${id}`, { headers: this.getAuthHeaders() });
     }
 
-    postBill(walletId, billData) {
-        return http.post(`/bill/insert/${walletId}`, billData, { headers: this.getAuthHeaders() });
+    postBill(walletId, userId, billData) {
+        return http.post(`/bill/insert/${walletId}/${userId}`, billData, { headers: this.getAuthHeaders() });
     }
 
     updateBill(id, billData) {

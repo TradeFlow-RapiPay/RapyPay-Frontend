@@ -3,6 +3,7 @@ import { BillApiService } from "@/walletManagement/services/bill-api.service.js"
 import { WalletApiService } from "@/walletManagement/services/wallet-api.service.js";
 import { BankApiService } from "@/bankManagement/services/bank-api.service.js";
 import { Bill } from "@/walletManagement/model/bill.entity.js";
+import {useAuthenticationStore} from "@/IAM/services/authentication.store.js";
 
 export default {
   name: "BillManagementComponent",
@@ -23,6 +24,12 @@ export default {
     this.fetchBills();
     this.fetchWalletDetails();
   },
+  computed: {
+    currentUserId() {
+      const authStore = useAuthenticationStore();
+      return authStore.getCurrentUserId;
+    }
+  },
   methods: {
     async fetchBills() {
       try {
@@ -34,6 +41,7 @@ export default {
     },
     async fetchWalletDetails() {
       try {
+        await this.walletApiService.calculate(this.walletId);
         const walletResponse = await this.walletApiService.getWalletById(this.walletId);
         const wallet = walletResponse.data;
 
@@ -53,23 +61,22 @@ export default {
     toggleNewBillCard() {
       this.showNewBillCard = !this.showNewBillCard;
     },
-    async createBill() {
+    createBill: async function () {
       try {
-        this.newBill.walletId = this.walletId;
-
         // Transformar las fechas al formato DD-MM-YYYY
+        const userId = this.currentUserId
         const [emissionYear, emissionMonth, emissionDay] = this.newBill.emissionDate.split('-');
         const formattedEmissionDate = `${emissionDay}-${emissionMonth}-${emissionYear}`;
 
         const [dueYear, dueMonth, dueDay] = this.newBill.dueDate.split('-');
         const formattedDueDate = `${dueDay}-${dueMonth}-${dueYear}`;
 
-        const response = await this.billApiService.postBill(this.walletId, {
+        const response = await this.billApiService.postBill(this.walletId, userId,{
           ...this.newBill,
           emissionDate: formattedEmissionDate,
-          dueDate: formattedDueDate
+          dueDate: formattedDueDate,
         });
-
+        await this.fetchWalletDetails();
         this.bills.push(response.data);
         this.newBill = new Bill();
         this.showNewBillCard = false;
@@ -111,6 +118,17 @@ export default {
           <div>
             <label for="netValue">Valor neto:</label>
             <input v-model="newBill.netValue" id="netValue" required/>
+          </div>
+          <div>
+            <label for="addressee">Destinatario:</label>
+            <input v-model="newBill.addressee" id="addressee" required/>
+          </div>
+          <div>
+            <label for="billType">Tipo de moneda:</label>
+            <select v-model="newBill.billType" id="billType" required>
+              <option value="TYPE_BILL">Factura</option>
+              <option value="TYPE_LETTER">Letra</option>
+            </select>
           </div>
           <div>
             <label for="emissionDate">Fecha de emisión:</label>

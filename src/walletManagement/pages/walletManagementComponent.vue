@@ -62,14 +62,17 @@ export default {
         // Transformar la fecha al formato DD-MM-YYYY
         const [year, month, day] = this.newWallet.closingDate.split('-');
         const formattedDate = `${day}-${month}-${year}`;
-
-        const response = await this.walletApiService.postWallet({
+        const userId = this.currentUserId
+        console.log(userId)
+        const response = await this.walletApiService.postWallet(userId,{
           walletName: this.newWallet.walletName,
           bank: this.newWallet.bank,
           description: this.newWallet.description,
           closingDate: formattedDate, // Usar la fecha formateada
           totalDiscount: this.newWallet.totalDiscount,
-          totalNetValue: this.newWallet.totalNetValue
+          totalNetValue: this.newWallet.totalNetValue,
+          moneyType: this.newWallet.moneyType,
+          userId: userId
         });
 
         const bank = this.banks.find(b => b.id === response.data.bank);
@@ -129,8 +132,8 @@ export default {
         <div>
           <label for="moneyType">Tipo de moneda:</label>
           <select v-model="newWallet.moneyType" id="moneyType" required>
-            <option value="PEN">Soles</option>
-            <option value="USD">Dólares</option>
+            <option value="TYPE_SOLES">Soles</option>
+            <option value="TYPE_DOLLAR">Dólares</option>
           </select>
         </div>
         <button type="submit">Guardar</button>
