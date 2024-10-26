@@ -13,6 +13,7 @@ const router = createRouter({
         { path: '/my-wallets', name: 'my-wallets', component: walletManagementComponent, meta: { title: 'Wallet Management' } },
         { path: '/banks', name: 'banks', component: bankManagementComponent, meta: { title: 'Bank Management' } },
         { path: '/wallets/:walletId/bills', name: 'bill-management', component: BillManagementComponent, meta: { title: 'Bill Management' } },
+        { path: '/wallet-management', name: 'wallet-management', component: walletManagementComponent, meta: { title: 'Wallet Management' } },
         { path: '/', redirect: '/my-wallets' },
         { path: '/sign-in', name: 'sign-in', component: SignInComponent, meta: { title: 'Sign In' } },
         { path: '/sign-up', name: 'sign-up', component: SignUpComponent, meta: { title: 'Sign Up' } },

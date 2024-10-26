@@ -22,7 +22,7 @@ export default {
   },
   created() {
     this.fetchBills();
-    this.fetchWalletDetails();
+    this.fetchWalletDetails(this.walletId);
   },
   computed: {
     currentUserId() {
@@ -39,24 +39,19 @@ export default {
         console.error("Error fetching bills:", error);
       }
     },
-    async fetchWalletDetails() {
-      try {
-        await this.walletApiService.calculate(this.walletId);
-        const walletResponse = await this.walletApiService.getWalletById(this.walletId);
-        const wallet = walletResponse.data;
-
-        const bankResponse = await this.bankApiService.getBankById(wallet.bank);
-        const bank = bankResponse.data;
-
-        this.walletDetails = {
-          ...wallet,
-          bankName: bank ? bank.bankName : "Unknown Bank",
-          tea: bank ? bank.tea : 0
-        };
-      } catch (error) {
-        console.error("Error fetching wallet details:", error);
-        this.errorMessage = 'Error fetching wallet details';
-      }
+    async fetchWalletDetails(walletId) {
+        try {
+          const response = await this.walletApiService.getWalletById(walletId);
+          this.walletDetails = response.data;
+          await this.walletApiService.calculate(walletId);
+        } catch (error) {
+          console.error("Error fetching wallet details:", error);
+          if (error.response && error.response.status === 403) {
+            this.errorMessage = 'You do not have permission to access this wallet.';
+          } else {
+            this.errorMessage = 'An error occurred while fetching wallet details.';
+          }
+        }
     },
     toggleNewBillCard() {
       this.showNewBillCard = !this.showNewBillCard;
@@ -90,6 +85,15 @@ export default {
       this.newBill = new Bill();
       this.showNewBillCard = false;
       this.errorMessage = '';
+    },
+    async deleteWallet(walletId) {
+      try {
+        await this.walletApiService.deleteWallet(walletId);
+        this.$router.push({ name: 'wallet-management' });
+      } catch (error) {
+        console.error("Error deleting wallet:", error);
+        this.errorMessage = 'An error occurred while deleting the wallet.';
+      }
     },
     calculatePercentage(wallet) {
       return (wallet.totalDiscount / wallet.totalNetValue) * 100;
@@ -169,6 +173,10 @@ export default {
       <p>Fecha de cierre: {{ walletDetails.closingDate }}</p>
       <p>Banco: {{ walletDetails.bankName }}</p>
       <p>Descuento: {{ walletDetails.totalDiscount }}</p>
+      <pv-button class="delete-wallet-btn" @click="deleteWallet(walletDetails.id)">
+        Borrar cartera
+        <i class="pi pi-trash" style="font-size: 1.3rem;"></i>
+      </pv-button>
     </div>
   </div>
 </template>
@@ -211,7 +219,7 @@ h1 {
   font-size: 18px;
   border: none;
   border-radius: 2em;
-  padding: 15px 30px;
+  padding: 10px 20px;
   cursor: pointer;
   margin-right: 1em;
   transition: background-color 0.3s ease, transform 0.3s ease;
@@ -220,13 +228,13 @@ h1 {
 .btn-save:hover {
   background-color: #2cdc78;
 }
-.btn-cancel {
+.btn-cancel,.delete-wallet-btn {
   background-color: rgba(239, 82, 82, 0.65);
   color: #fff;
   font-size: 18px;
   border: none;
   border-radius: 2em;
-  padding: 15px 30px;
+  padding: 10px 20px;
   cursor: pointer;
   margin-right: 1em;
   transition: background-color 0.3s ease, transform 0.3s ease;

@@ -91,15 +91,6 @@ export default {
         }
       }
     },
-    async deleteWallet(walletId) {
-      try {
-        await this.walletApiService.deleteWallet(walletId);
-        this.wallets = this.wallets.filter(wallet => wallet.id !== walletId);
-      } catch (error) {
-        console.error("Error deleting wallet:", error);
-        this.errorMessage = 'An error occurred while deleting the wallet.';
-      }
-    },
     cancelCreation() {
       this.newWallet = new Wallet();
       this.showNewWalletCard = false;
@@ -156,7 +147,6 @@ export default {
         <p>Banco: {{ wallet.bankName }}</p>
         <p>TCEA: {{ wallet.tcea }}</p>
         <p>Fecha de cierre: {{ wallet.closingDate }}</p>
-        <i class="pi pi-trash" @click="deleteBill(bill.id)" style="font-size: 1.3rem; color: #27AE60;"></i>
       </div>
     </div>
   </div>
@@ -186,6 +176,11 @@ button {
 
 button:hover {
   background-color: #2cdc78;
+}
+.delete-wallet-btn{
+  margin-left: 90%;
+  cursor: pointer;
+  background-color: rgba(39, 174, 96, 0);
 }
 
 .new-wallet-card {
@@ -240,9 +235,5 @@ input, select, textarea {
 
 .wallet-card p {
   margin: 0.5em 0;
-}
-.wallet-card i{
-  margin-left: 90%;
-  cursor: pointer;
 }
 </style>
