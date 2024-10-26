@@ -1,11 +1,10 @@
 import http from "@/shared/services/http-common.js";
 
 export class WalletApiService {
-    //para wallet
 
     //puede recivir nulo, como la lista de bill y closingDate, totalDiscount, totalNetValue
     postWallet(walletData) {
-        return http.post('/wallet/insert', walletData);
+        return http.post('/wallet/insert', walletData, { headers: this.getAuthHeaders() });
     }
     updateWallet(id, walletData) {
         return http.put(`/wallet/update/${id}`, walletData);
@@ -18,7 +17,7 @@ export class WalletApiService {
     }
 
     getAuthHeaders() {
-        const token = localStorage.getItem('authToken'); // Adjust this line based on how you store the token
+        const token = localStorage.getItem('authToken');
         return { Authorization: `Bearer ${token}` };
     }
     getAllWallet(){
@@ -30,7 +29,4 @@ export class WalletApiService {
     getWalletByUserId(userId){
         return http.get(`/wallet/user/${userId}`);
     }
-
-
-
 }

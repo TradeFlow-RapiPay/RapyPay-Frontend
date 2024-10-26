@@ -126,6 +126,13 @@ export default {
           <label for="closingDate">Fecha de cierre:</label>
           <input type="date" v-model="newWallet.closingDate" id="closingDate" required/>
         </div>
+        <div>
+          <label for="moneyType">Tipo de moneda:</label>
+          <select v-model="newWallet.moneyType" id="moneyType" required>
+            <option value="PEN">Soles</option>
+            <option value="USD">Dólares</option>
+          </select>
+        </div>
         <button type="submit">Guardar</button>
         <button type="button" @click="cancelCreation">Cancelar</button>
       </form>
