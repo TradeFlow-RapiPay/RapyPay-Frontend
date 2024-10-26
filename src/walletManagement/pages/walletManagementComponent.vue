@@ -59,7 +59,6 @@ export default {
     },
     async createWallet() {
       try {
-        // Transformar la fecha al formato DD-MM-YYYY
         const [year, month, day] = this.newWallet.closingDate.split('-');
         const formattedDate = `${day}-${month}-${year}`;
         const userId = this.currentUserId
@@ -68,7 +67,7 @@ export default {
           walletName: this.newWallet.walletName,
           bank: this.newWallet.bank,
           description: this.newWallet.description,
-          closingDate: formattedDate, // Usar la fecha formateada
+          closingDate: formattedDate,
           totalDiscount: this.newWallet.totalDiscount,
           totalNetValue: this.newWallet.totalNetValue,
           moneyType: this.newWallet.moneyType,
@@ -90,6 +89,15 @@ export default {
         } else {
           this.errorMessage = 'An error occurred while creating the wallet.';
         }
+      }
+    },
+    async deleteWallet(walletId) {
+      try {
+        await this.walletApiService.deleteWallet(walletId);
+        this.wallets = this.wallets.filter(wallet => wallet.id !== walletId);
+      } catch (error) {
+        console.error("Error deleting wallet:", error);
+        this.errorMessage = 'An error occurred while deleting the wallet.';
       }
     },
     cancelCreation() {
@@ -148,6 +156,7 @@ export default {
         <p>Banco: {{ wallet.bankName }}</p>
         <p>TCEA: {{ wallet.tcea }}</p>
         <p>Fecha de cierre: {{ wallet.closingDate }}</p>
+        <i class="pi pi-trash" @click="deleteBill(bill.id)" style="font-size: 1.3rem; color: #27AE60;"></i>
       </div>
     </div>
   </div>
@@ -231,5 +240,9 @@ input, select, textarea {
 
 .wallet-card p {
   margin: 0.5em 0;
+}
+.wallet-card i{
+  margin-left: 90%;
+  cursor: pointer;
 }
 </style>

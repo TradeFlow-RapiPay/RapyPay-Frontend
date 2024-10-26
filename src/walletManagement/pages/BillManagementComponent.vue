@@ -93,15 +93,23 @@ export default {
     },
     calculatePercentage(wallet) {
       return (wallet.totalDiscount / wallet.totalNetValue) * 100;
+    },
+    async deleteBill(billId) {
+      try {
+        await this.billApiService.deleteBill(billId);
+        this.bills = this.bills.filter(bill => bill.id !== billId);
+      } catch (error) {
+        console.error("Error deleting bill:", error);
+        this.errorMessage = 'An error occurred while deleting the bill.';
+      }
     }
   }
 };
 </script>
-
 <template>
   <div>
-    <h1>Cartera {{ walletDetails.walletName }}</h1>
-    <div class="sub-titulo">
+    <h1 v-if="walletDetails">Cartera {{ walletDetails.walletName }}</h1>
+    <div v-if="walletDetails" class="sub-titulo">
       <span>ID: {{ walletDetails.id }}</span>
     </div>
     <div class="div-bill-btn">
@@ -124,7 +132,7 @@ export default {
             <input v-model="newBill.addressee" id="addressee" required/>
           </div>
           <div>
-            <label for="billType">Tipo de moneda:</label>
+            <label for="billType">Tipo de comprobante:</label>
             <select v-model="newBill.billType" id="billType" required>
               <option value="TYPE_BILL">Factura</option>
               <option value="TYPE_LETTER">Letra</option>
@@ -143,7 +151,6 @@ export default {
         </form>
         <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
       </div>
-
     </div>
     <div class="bill-cards">
       <div v-for="bill in bills" :key="bill.id" class="bill-card">
@@ -151,6 +158,7 @@ export default {
         <p>Valor neto: {{ bill.netValue }}</p>
         <p>Fecha de emisión: {{ bill.emissionDate }}</p>
         <p>Fecha de vencimiento: {{ bill.dueDate }}</p>
+        <i class="pi pi-trash" @click="deleteBill(bill.id)" style="font-size: 1.3rem; color: #27AE60; margin-left: 90%;"></i>
       </div>
     </div>
     <div v-if="walletDetails" class="wallet-details-card">
@@ -248,7 +256,7 @@ label {
   margin-bottom: 0.5em;
 }
 
-input {
+input, select {
   width: 100%;
   padding: 0.5em;
   border: 1px solid #ccc;

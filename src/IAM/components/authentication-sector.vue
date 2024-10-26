@@ -56,7 +56,8 @@ export default {
       <a class="welcome"> Welcome,
         <span>{{ currentUsername }}</span>
       </a>
-      <a class="signout" @click="onSignOut">Sign Out</a>
+      <a class="signout" @click="onSignOut">Sign Out <i class="pi pi-sign-out" style="font-size: 1rem"></i>
+      </a>
     </div>
     <div v-else>
       <pv-button :class="['signin', { active: activeButton === 'sign-in' }]" @click="onSignIn"> Sign in</pv-button>
@@ -68,7 +69,7 @@ export default {
 a {
   font-family: Nunito, sans-serif;
   text-decoration: none;
-  font-size: 24px;
+  font-size: 22px;
   padding: 0.6em;
   cursor: pointer;
   color: #2C3E50;
@@ -116,12 +117,11 @@ a {
 }
 
 .signout {
-  background-color: rgba(239, 82, 82, 0.65);
-  color: #fff;
-  font-size: 18px;
+  color: indianred;
+  font-weight: bolder;
   border: none;
   border-radius: 2em;
-  padding: 15px 30px;
+  padding: 13px;
   cursor: pointer;
   margin-right: 1em;
   transition: background-color 0.3s ease, transform 0.3s ease;
