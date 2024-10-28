@@ -177,7 +177,6 @@ h1 {
   padding: 10px 20px;
   cursor: pointer;
   margin-right: 1em;
-  transition: background-color 0.3s ease, transform 0.3s ease;
   text-align: center;
   display: inline-block;
 }
@@ -190,13 +189,24 @@ h1 {
   padding: 10px 20px;
   cursor: pointer;
   margin-right: 1em;
-  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
+.new-wallet-btn:hover {
+  background-color: #2cdc78;
+  transform: translateY(-2px);
+  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
 
-.btn-cancel:hover{
+.btn-save:hover {
+  background-color: #2cdc78;
+  transform: translateY(-2px);
+  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.btn-cancel:hover {
   background-color: firebrick !important;
-  border: none !important;
+  transform: translateY(-2px);
+  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 .new-wallet-card {
@@ -234,6 +244,7 @@ input, select, textarea {
   justify-content: center;
 }
 
+
 .wallet-card {
   background-color: #f8f9fa;
   border-radius: 1em;
@@ -242,6 +253,7 @@ input, select, textarea {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
   cursor: pointer;
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out; /* Añade una transición suave */
 }
 
 .wallet-card h3 {
@@ -252,4 +264,11 @@ input, select, textarea {
 .wallet-card p {
   margin: 0.5em 0;
 }
+
+.wallet-card:hover {
+  background-color: #e0e0e0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+}
+
 </style>

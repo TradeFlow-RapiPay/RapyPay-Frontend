@@ -124,9 +124,13 @@ a {
   padding: 13px;
   cursor: pointer;
   margin-right: 1em;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
+.signout:hover {
+  color: #a41f12;
+  transform: scale(1.05);
+}
 
 span {
   font-weight: 800 !important;

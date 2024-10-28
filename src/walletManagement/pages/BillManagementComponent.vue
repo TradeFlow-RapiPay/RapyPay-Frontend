@@ -166,7 +166,7 @@ export default {
     <div class="bill-cards">
       <div v-for="bill in bills" :key="bill.id" class="bill-card">
         <h3>{{ bill.billNumber }}</h3>
-        <p>{{ bill.billType === 'TYPE_BILL' ? 'Factura' : bill.billType === 'TYPE_LETTER' ? 'Letra' : 'Unknown' }}</p>
+        <p>Tipo de factura: {{ bill.billType === 'TYPE_BILL' ? 'Factura' : bill.billType === 'TYPE_LETTER' ? 'Letra' : 'Unknown' }}</p>
         <p>Valor neto: {{ bill.netValue }}</p>
         <p>Destinatario: {{ bill.addressee }}</p>
         <p>Fecha de emisión: {{ bill.emissionDate }}</p>
@@ -239,12 +239,8 @@ h1 {
   padding: 10px 20px;
   cursor: pointer;
   margin-right: 1em;
-  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.btn-save:hover {
-  background-color: #2cdc78;
-}
 .btn-cancel,.delete-wallet-btn {
   background-color: rgba(239, 82, 82, 0.65);
   color: #fff;
@@ -254,12 +250,24 @@ h1 {
   padding: 10px 20px;
   cursor: pointer;
   margin-right: 1em;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.new-bill-btn:hover {
+  background-color: #2cdc78;
+  transform: translateY(-2px);
+  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.btn-save:hover {
+  background-color: #2cdc78;
+  transform: translateY(-2px);
+  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 .btn-cancel:hover, .delete-wallet-btn:hover {
   background-color: firebrick !important;
-  border: none !important;
+  transform: translateY(-2px);
+  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 .new-bill-btn {
@@ -309,6 +317,8 @@ input, select{
   width: 300px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out; /* Añade una transición suave */
 }
 
 .bill-card h3 {
@@ -321,6 +331,13 @@ input, select{
   text-align: left;
   padding-left: 1em;
 }
+
+.bill-card:hover {
+  background-color: #e0e0e0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+}
+
 .wallet-details-card{
   margin: 2em ;
 }

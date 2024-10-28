@@ -1,7 +1,7 @@
 <script>
 import {useAuthenticationStore} from "../services/authentication.store.js";
 import {SignUpRequest} from "../model/sign-up.request.js";
-import {AuthenticationService} from "@/iam/services/authentication.service.js";
+import {AuthenticationService} from "@/IAM/services/authentication.service.js";
 import {ref} from "vue";
 
 export default {

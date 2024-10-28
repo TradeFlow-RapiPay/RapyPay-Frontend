@@ -32,7 +32,7 @@ export const useAuthenticationStore = defineStore({
 
                 router.push({ name: 'my-wallets' });
             } catch (error) {
-                toast.add({ severity: 'error', summary: 'Error', detail: 'User already exists' , life: 3000,});
+                toast.add({ severity: 'error', summary: 'Error', detail: 'User or password incorrect' , life: 3000,});
                 router.push({ name: 'sign-in' });
             }
         },
