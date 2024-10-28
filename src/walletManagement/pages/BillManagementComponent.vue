@@ -1,5 +1,5 @@
 <script>
-import { BillApiService } from "@/walletManagement/services/bill-api.service.js";
+import {BillApiService} from "@/walletManagement/services/bill-api.service.js";
 import { WalletApiService } from "@/walletManagement/services/wallet-api.service.js";
 import { BankApiService } from "@/bankManagement/services/bank-api.service.js";
 import { Bill } from "@/walletManagement/model/bill.entity.js";
@@ -166,10 +166,12 @@ export default {
     <div class="bill-cards">
       <div v-for="bill in bills" :key="bill.id" class="bill-card">
         <h3>{{ bill.billNumber }}</h3>
+        <p>{{ bill.billType === 'TYPE_BILL' ? 'Factura' : bill.billType === 'TYPE_LETTER' ? 'Letra' : 'Unknown' }}</p>
         <p>Valor neto: {{ bill.netValue }}</p>
+        <p>Destinatario: {{ bill.addressee }}</p>
         <p>Fecha de emisión: {{ bill.emissionDate }}</p>
         <p>Fecha de vencimiento: {{ bill.dueDate }}</p>
-        <i class="pi pi-trash" @click="deleteBill(bill.id)" style="font-size: 1.3rem; color: #27AE60; margin-left: 90%;"></i>
+        <i class="pi pi-trash bill-trash" @click="deleteBill(bill.id)" style="  margin-left: 90%; font-size: 1.3rem;   color: #27AE60;"></i>
       </div>
     </div>
     <div v-if="walletDetails" class="wallet-details-card">
@@ -182,7 +184,7 @@ export default {
       <p>Descuento: {{ walletDetails.totalDiscount }}</p>
       <pv-button class="delete-wallet-btn" @click="deleteWallet(walletDetails.id)">
         Borrar cartera
-        <i class="pi pi-trash" style="font-size: 1.3rem;"></i>
+        <i class="pi pi-trash wallet-trash" style="font-size: 1.3rem;"></i>
       </pv-button>
     </div>
   </div>
@@ -200,6 +202,14 @@ export default {
   margin-right: auto;
 }
 
+.bill-trash:hover {
+  color: #e74c3c !important;
+  cursor: pointer;
+}
+.wallet-trash:hover {
+  color: white;
+  cursor: pointer;
+}
 .parent-container {
   display: flex;
   justify-content: center;
@@ -247,8 +257,9 @@ h1 {
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.btn-cancel:hover {
-  background-color: firebrick;
+.btn-cancel:hover, .delete-wallet-btn:hover {
+  background-color: firebrick !important;
+  border: none !important;
 }
 
 .new-bill-btn {
@@ -307,6 +318,8 @@ input, select{
 
 .bill-card p {
   margin: 0.5em 0;
+  text-align: left;
+  padding-left: 1em;
 }
 .wallet-details-card{
   margin: 2em ;
