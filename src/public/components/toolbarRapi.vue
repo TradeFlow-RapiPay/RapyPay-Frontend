@@ -121,17 +121,9 @@ img {
   display: flex;
 }
 
-.items-toolbar {
-  margin-left: 3em;
-}
-
 
 
 @media (max-width: 950px) {
-  .btn-new-wallet {
-    font-size: 18px;
-  }
-
   img {
     width: 60px;
   }

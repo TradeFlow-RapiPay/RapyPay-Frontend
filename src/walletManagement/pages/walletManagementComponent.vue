@@ -59,16 +59,15 @@ export default {
     },
     async createWallet() {
       try {
-        // Transformar la fecha al formato DD-MM-YYYY
         const [year, month, day] = this.newWallet.closingDate.split('-');
         const formattedDate = `${day}-${month}-${year}`;
         const userId = this.currentUserId
         console.log(userId)
-        const response = await this.walletApiService.postWallet(userId,{
+        const response = await this.walletApiService.postWallet(userId, {
           walletName: this.newWallet.walletName,
           bank: this.newWallet.bank,
           description: this.newWallet.description,
-          closingDate: formattedDate, // Usar la fecha formateada
+          closingDate: formattedDate,
           totalDiscount: this.newWallet.totalDiscount,
           totalNetValue: this.newWallet.totalNetValue,
           moneyType: this.newWallet.moneyType,
@@ -105,41 +104,43 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div class="wallet-management">
     <h1>Mis carteras</h1>
-    <button @click="toggleNewWalletCard">+ Nueva cartera</button>
-    <div v-if="showNewWalletCard" class="new-wallet-card">
-      <h2>Registrar nueva cartera</h2>
-      <form @submit.prevent="createWallet">
-        <div>
-          <label for="walletName">Nombre de la cartera:</label>
-          <input v-model="newWallet.walletName" id="walletName" required/>
-        </div>
-        <div>
-          <label for="bank">Banco:</label>
-          <select v-model="newWallet.bank" id="bank" required>
-            <option v-for="bank in banks" :key="bank.id" :value="bank.id">{{ bank.bankName }}</option>
-          </select>
-        </div>
-        <div>
-          <label for="description">Descripción:</label>
-          <textarea v-model="newWallet.description" id="description"></textarea>
-        </div>
-        <div>
-          <label for="closingDate">Fecha de cierre:</label>
-          <input type="date" v-model="newWallet.closingDate" id="closingDate" required/>
-        </div>
-        <div>
-          <label for="moneyType">Tipo de moneda:</label>
-          <select v-model="newWallet.moneyType" id="moneyType" required>
-            <option value="TYPE_SOLES">Soles</option>
-            <option value="TYPE_DOLLAR">Dólares</option>
-          </select>
-        </div>
-        <button type="submit">Guardar</button>
-        <button type="button" @click="cancelCreation">Cancelar</button>
-      </form>
-      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+    <pv-button class="new-wallet-btn" @click="toggleNewWalletCard">+ Nueva cartera</pv-button>
+    <div class="parent-container">
+      <div v-if="showNewWalletCard" class="new-wallet-card">
+        <h2>Registrar nueva cartera</h2>
+        <form @submit.prevent="createWallet">
+          <div>
+            <label for="walletName">Nombre de la cartera:</label>
+            <input v-model="newWallet.walletName" id="walletName" required/>
+          </div>
+          <div>
+            <label for="bank">Banco:</label>
+            <select v-model="newWallet.bank" id="bank" required>
+              <option v-for="bank in banks" :key="bank.id" :value="bank.id">{{ bank.bankName }}</option>
+            </select>
+          </div>
+          <div>
+            <label for="description">Descripción:</label>
+            <textarea v-model="newWallet.description" id="description"></textarea>
+          </div>
+          <div>
+            <label for="closingDate">Fecha de cierre:</label>
+            <input type="date" v-model="newWallet.closingDate" id="closingDate" required/>
+          </div>
+          <div>
+            <label for="moneyType">Tipo de moneda:</label>
+            <select v-model="newWallet.moneyType" id="moneyType" required>
+              <option value="TYPE_SOLES">Soles</option>
+              <option value="TYPE_DOLLAR">Dólares</option>
+            </select>
+          </div>
+          <pv-button class="btn-save" type="submit">Guardar</pv-button>
+          <pv-button class="btn-cancel" type="button" @click="cancelCreation">Cancelar</pv-button>
+        </form>
+        <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+      </div>
     </div>
     <div class="wallet-cards">
       <div v-for="wallet in wallets" :key="wallet.id" class="wallet-card" @click="openBillManagement(wallet.id)">
@@ -147,6 +148,7 @@ export default {
         <p>ID: {{ wallet.id }}</p>
         <p>Banco: {{ wallet.bankName }}</p>
         <p>TCEA: {{ wallet.tcea }}</p>
+        <p>{{ wallet.moneyType === 'TYPE_SOLES' ? 'Soles' : wallet.moneyType === 'TYPE_DOLLAR' ? 'Dólares' : 'Unknown' }}</p>
         <p>Fecha de cierre: {{ wallet.closingDate }}</p>
       </div>
     </div>
@@ -154,36 +156,54 @@ export default {
 </template>
 
 <style scoped>
+.wallet-management{
+  margin: 2em;
+}
+.parent-container {
+  display: flex;
+  justify-content: center;
+}
 h1 {
   text-align: center;
   font-size: 3em;
   margin-top: 2em;
 }
-
-button {
+.new-wallet-btn, .btn-save {
   background-color: #27AE60;
-  color: white;
+  color: #fff;
+  font-size: 18px;
   border: none;
+  border-radius: 2em;
   padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 24px;
-  font-family: 'Ubuntu', sans-serif;
-  margin: 1em;
   cursor: pointer;
-  border-radius: 20px;
+  margin-right: 1em;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  text-align: center;
+  display: inline-block;
+}
+.btn-cancel {
+  background-color: rgba(239, 82, 82, 0.65);
+  color: #fff;
+  font-size: 18px;
+  border: none;
+  border-radius: 2em;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-right: 1em;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-button:hover {
-  background-color: #2cdc78;
+
+.btn-cancel:hover{
+  background-color: firebrick !important;
+  border: none !important;
 }
 
 .new-wallet-card {
   background-color: #f8f9fa;
   border-radius: 1.5em;
   padding: 1em;
-  margin: 2em;
+  width: 40%;
 }
 
 form div {

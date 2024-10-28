@@ -1,5 +1,5 @@
 <script>
-import { BillApiService } from "@/walletManagement/services/bill-api.service.js";
+import {BillApiService} from "@/walletManagement/services/bill-api.service.js";
 import { WalletApiService } from "@/walletManagement/services/wallet-api.service.js";
 import { BankApiService } from "@/bankManagement/services/bank-api.service.js";
 import { Bill } from "@/walletManagement/model/bill.entity.js";
@@ -71,7 +71,7 @@ export default {
         const [dueYear, dueMonth, dueDay] = this.newBill.dueDate.split('-');
         const formattedDueDate = `${dueDay}-${dueMonth}-${dueYear}`;
 
-        const response = await this.billApiService.postBill(this.walletId, userId,{
+        const response = await this.billApiService.postBill(this.walletId, userId, {
           ...this.newBill,
           emissionDate: formattedEmissionDate,
           dueDate: formattedDueDate,
@@ -93,6 +93,24 @@ export default {
     },
     calculatePercentage(wallet) {
       return (wallet.totalDiscount / wallet.totalNetValue) * 100;
+    },
+    async deleteWallet(walletId) {
+      try {
+        await this.walletApiService.deleteWallet(walletId);
+        this.$router.push({name: 'wallet-management'});
+      } catch (error) {
+        console.error("Error deleting wallet:", error);
+        this.errorMessage = 'An error occurred while deleting the wallet.';
+      }
+    },
+    async deleteBill(billId) {
+      try {
+        await this.billApiService.deleteBill(billId);
+        this.bills = this.bills.filter(bill => bill.id !== billId);
+      } catch (error) {
+        console.error("Error deleting bill:", error);
+        this.errorMessage = 'An error occurred while deleting the bill.';
+      }
     }
   }
 };
@@ -124,7 +142,7 @@ export default {
             <input v-model="newBill.addressee" id="addressee" required/>
           </div>
           <div>
-            <label for="billType">Tipo de moneda:</label>
+            <label for="billType">Tipo de comprobante:</label>
             <select v-model="newBill.billType" id="billType" required>
               <option value="TYPE_BILL">Factura</option>
               <option value="TYPE_LETTER">Letra</option>
@@ -148,9 +166,12 @@ export default {
     <div class="bill-cards">
       <div v-for="bill in bills" :key="bill.id" class="bill-card">
         <h3>{{ bill.billNumber }}</h3>
+        <p>{{ bill.billType === 'TYPE_BILL' ? 'Factura' : bill.billType === 'TYPE_LETTER' ? 'Letra' : 'Unknown' }}</p>
         <p>Valor neto: {{ bill.netValue }}</p>
+        <p>Destinatario: {{ bill.addressee }}</p>
         <p>Fecha de emisión: {{ bill.emissionDate }}</p>
         <p>Fecha de vencimiento: {{ bill.dueDate }}</p>
+        <i class="pi pi-trash bill-trash" @click="deleteBill(bill.id)" style="  margin-left: 90%; font-size: 1.3rem;   color: #27AE60;"></i>
       </div>
     </div>
     <div v-if="walletDetails" class="wallet-details-card">
@@ -161,6 +182,10 @@ export default {
       <p>Fecha de cierre: {{ walletDetails.closingDate }}</p>
       <p>Banco: {{ walletDetails.bankName }}</p>
       <p>Descuento: {{ walletDetails.totalDiscount }}</p>
+      <pv-button class="delete-wallet-btn" @click="deleteWallet(walletDetails.id)">
+        Borrar cartera
+        <i class="pi pi-trash wallet-trash" style="font-size: 1.3rem;"></i>
+      </pv-button>
     </div>
   </div>
 </template>
@@ -177,6 +202,14 @@ export default {
   margin-right: auto;
 }
 
+.bill-trash:hover {
+  color: #e74c3c !important;
+  cursor: pointer;
+}
+.wallet-trash:hover {
+  color: white;
+  cursor: pointer;
+}
 .parent-container {
   display: flex;
   justify-content: center;
@@ -203,7 +236,7 @@ h1 {
   font-size: 18px;
   border: none;
   border-radius: 2em;
-  padding: 15px 30px;
+  padding: 10px 20px;
   cursor: pointer;
   margin-right: 1em;
   transition: background-color 0.3s ease, transform 0.3s ease;
@@ -212,20 +245,21 @@ h1 {
 .btn-save:hover {
   background-color: #2cdc78;
 }
-.btn-cancel {
+.btn-cancel,.delete-wallet-btn {
   background-color: rgba(239, 82, 82, 0.65);
   color: #fff;
   font-size: 18px;
   border: none;
   border-radius: 2em;
-  padding: 15px 30px;
+  padding: 10px 20px;
   cursor: pointer;
   margin-right: 1em;
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.btn-cancel:hover {
-  background-color: firebrick;
+.btn-cancel:hover, .delete-wallet-btn:hover {
+  background-color: firebrick !important;
+  border: none !important;
 }
 
 .new-bill-btn {
@@ -248,7 +282,7 @@ label {
   margin-bottom: 0.5em;
 }
 
-input {
+input, select{
   width: 100%;
   padding: 0.5em;
   border: 1px solid #ccc;
@@ -284,6 +318,8 @@ input {
 
 .bill-card p {
   margin: 0.5em 0;
+  text-align: left;
+  padding-left: 1em;
 }
 .wallet-details-card{
   margin: 2em ;
