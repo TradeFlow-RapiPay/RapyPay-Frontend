@@ -5,6 +5,7 @@ export class AuthenticationService {
         return http.post('/user/signin', signInRequest);
     }
     signUp(signUpRequest) {
+        console.log(signUpRequest);
         return http.post('/user/signup', signUpRequest);
     }
 }

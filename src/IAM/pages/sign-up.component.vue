@@ -2,6 +2,7 @@
 import {useAuthenticationStore} from "../services/authentication.store.js";
 import {SignUpRequest} from "../model/sign-up.request.js";
 import {AuthenticationService} from "@/iam/services/authentication.service.js";
+import {ref} from "vue";
 
 export default {
   name: "sign-up",
@@ -11,7 +12,14 @@ export default {
       authenticationService: null,
       username: "",
       password: "",
-      submitted: false
+      confirmPassword: "",
+      role: "",
+      submitted: false,
+      errorMessage: "",
+      roles: ref([
+        { name: 'ROLE_USER', code: 'ROLE_USER' },
+        { name: 'ROLE_ADMIN', code: 'ROLE_ADMIN' }
+      ])
     };
   },
   created() {
@@ -20,9 +28,13 @@ export default {
   methods: {
     onSignUp() {
       this.submitted = true;
-      if (this.username && this.password) {
-        let signUpRequest = new SignUpRequest(this.username, this.password,);
-        console.log(signUpRequest);
+      if (this.username && this.password && this.confirmPassword) {
+        if (this.password !== this.confirmPassword) {
+          this.errorMessage = "Las contraseñas no coinciden.";
+          return;
+        }
+        console.log(this.role);
+        let signUpRequest = new SignUpRequest(this.username, this.password, this.role);
         this.authenticationStore.signUp(signUpRequest, this.$router, this.$toast);
       }
     }
@@ -36,34 +48,49 @@ export default {
       <img src="https://github.com/user-attachments/assets/5afe8540-75c5-467d-ae79-e92e936e8beb" alt="logo-RapiPay" />
       <h2 class="title">Registrate!</h2>
     </div>
-      <form @submit.prevent="onSignUp">
-        <div class="p-fluid">
-          <div class="field mt-5">
-            <pv-float-label>
-              <label class="label-input" for="username">Usuario</label>
-              <pv-input-text class="input" id="username" v-model="username" :class="{'p-invalid': submitted && !username}"/>
-              <small v-if="submitted && !username" class="p-invalid">Username es requerido.</small>
-            </pv-float-label>
-          </div>
-          <div class="field mt-5">
-            <pv-float-label>
-              <label class="label-input"  for="password">Contraseña</label>
-              <pv-input-text class="input" id="password" v-model="password" :class="{'p-invalid': submitted && !password}" type="password"/>
-              <small v-if="submitted && !password" class="p-invalid">Contraseña es requerida</small>
-            </pv-float-label>
-          </div>
-          <div class="registration-question">
-            <a>
-              <router-link style="text-decoration: none !important;" :to="{ path: '/login' }">
-                <span class="text-iniciosesion">Ya tengo una cuenta</span> <span class="route-to-registration">Iniciar sesión</span>
-              </router-link>
-            </a>
-          </div>
-          <div class="button-container">
-            <pv-button class="btn-register" type="submit">Registrar</pv-button>
-          </div>
+    <form @submit.prevent="onSignUp">
+      <div class="p-fluid">
+        <div class="field mt-5">
+          <pv-float-label>
+            <label class="label-input" for="username">Usuario</label>
+            <pv-input-text class="input" id="username" v-model="username" :class="{'p-invalid': submitted && !username}"/>
+            <small v-if="submitted && !username" class="p-invalid">Username es requerido.</small>
+          </pv-float-label>
         </div>
-      </form>
+        <div class="field mt-5">
+          <pv-float-label>
+            <label class="label-input" for="password">Contraseña</label>
+            <pv-input-text class="input" id="password" v-model="password" :class="{'p-invalid': submitted && !password}" type="password"/>
+            <small v-if="submitted && !password" class="p-invalid">Contraseña es requerida</small>
+          </pv-float-label>
+        </div>
+        <div class="field mt-5">
+          <pv-float-label>
+            <label class="label-input" for="confirmPassword">Confirmar Contraseña</label>
+            <pv-input-text class="input" id="confirmPassword" v-model="confirmPassword" :class="{'p-invalid': submitted && !confirmPassword}" type="password"/>
+            <br>
+            <small v-if="submitted && !confirmPassword" class="p-invalid">Confirmar Contraseña es requerida</small>
+            <small v-if="errorMessage" class="p-invalid">{{ errorMessage }}</small>
+          </pv-float-label>
+        </div>
+        <div>
+          <label for="role">Rol:</label>
+          <select v-model="role" id="role" required>
+            <option value="ROLE_USER">Usuario</option>
+            <option value="ROLE_ADMIN">Administrador</option>
+          </select>
+        </div>
+
+        <div class="registration-question">
+          <router-link style="text-decoration: none !important;" :to="{ path: '/login' }">
+            <span class="text-iniciosesion">Ya tengo una cuenta</span> <span class="route-to-registration">Iniciar sesión</span>
+          </router-link>
+        </div>
+        <div class="button-container">
+          <pv-button class="btn-register" type="submit">Registrar</pv-button>
+        </div>
+      </div>
+    </form>
     <pv-toast />
   </div>
 </template>
@@ -152,5 +179,19 @@ pv-password {
     font-size: 16px;
     padding: 10px 20px;
   }
+}
+label {
+  display: block;
+  margin-bottom: 0.5em;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 0.5em;
+  border: 1px solid #ccc;
+  border-radius: 0.5em;
+}
+form div {
+  margin-bottom: 1em;
 }
 </style>
