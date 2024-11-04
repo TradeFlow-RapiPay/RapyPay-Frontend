@@ -7,12 +7,19 @@ const authenticationService = new AuthenticationService();
 
 export const useAuthenticationStore = defineStore({
     id: 'authentication',
-    state: () => ({ signedIn: false, userId: 0, userName: '', currentUserId: null,}),
+    state: () => ({
+        signedIn: localStorage.getItem('token') ? true : false,
+        userId: localStorage.getItem('userId') || 0,
+        username: localStorage.getItem('username') || '',
+        role: localStorage.getItem('role') || '',
+        currentUserId: null,
+    }),
     getters: {
         isSignedIn: (state) => state["signedIn"],
         currentUserId: state => state["userId"],
         getCurrentUserId: (state) => state.currentUserId,
         currentUsername: state => state["username"],
+        currentRole: state => state["role"],
         currentToken: () => localStorage.getItem('token')
     },
     actions: {
@@ -22,14 +29,20 @@ export const useAuthenticationStore = defineStore({
         async signIn(signInRequest, router, toast) {
             try {
                 const response = await authenticationService.signIn(signInRequest);
-                let signInResponse = new SignInResponse(response.data.userId, response.data.username, response.data.token);
-                console.log(signInResponse);
+                let signInResponse = new SignInResponse(response.data.userId, response.data.username, response.data.role, response.data.token);
                 this.signedIn = true;
                 this.userId = signInResponse.userId;
                 this.username = signInResponse.username;
+                this.role = signInResponse.role;
                 localStorage.setItem('token', signInResponse.token);
+                localStorage.setItem('username', signInResponse.username);
+                localStorage.setItem('role', signInResponse.role);
                 toast.add({ severity: 'success', Success: 'Success', detail: 'Log in successful' , life: 3000,});
 
+                if (signInResponse.role === 'ROLE_ADMIN') {
+                    router.push({ name: 'bank-admin-management' });
+                    return;
+                }
                 router.push({ name: 'my-wallets' });
             } catch (error) {
                 toast.add({ severity: 'error', summary: 'Error', detail: 'User or password incorrect' , life: 3000,});
@@ -54,7 +67,11 @@ export const useAuthenticationStore = defineStore({
             this.signedIn = false;
             this.userId = 0;
             this.username = '';
+            this.role = '';
             localStorage.removeItem('token');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('username');
+            localStorage.removeItem('role');
             console.log('Signed out');
             await router.push({ name: 'sign-in' });
         }

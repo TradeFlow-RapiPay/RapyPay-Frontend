@@ -19,6 +19,7 @@ const router = createRouter({
         { path: '/', redirect: '/my-wallets' },
         { path: '/sign-in', name: 'sign-in', component: SignInComponent, meta: { title: 'Sign In' } },
         { path: '/sign-up', name: 'sign-up', component: SignUpComponent, meta: { title: 'Sign Up' } },
+        { path: '/bank-admin-management', name: 'bank-admin-management', component: bankAdminManagementComponent, meta: { title: 'Bank Admin Management' } },
         { path: '/:pathMatch(.*)*', component: PageNotFoundComponent },
     ]
 });
