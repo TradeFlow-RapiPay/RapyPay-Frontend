@@ -1,5 +1,6 @@
 <script>
 import ToolbarRapi from "@/public/components/toolbarRapi.vue";
+import {useAuthenticationStore} from "@/IAM/services/authentication.store.js";
 
 export default {
   name: "app.vue",

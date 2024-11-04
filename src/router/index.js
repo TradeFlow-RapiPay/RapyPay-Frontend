@@ -6,10 +6,12 @@ import PageNotFoundComponent from "@/public/pages/pageNotFoundComponent.vue";
 import SignInComponent from "@/IAM/pages/sign-in.component.vue";
 import SignUpComponent from "@/IAM/pages/sign-up.component.vue";
 import { authenticationGuard } from "@/IAM/services/authentication.guard.js";
+import bankAdminManagementComponent from "@/bankManagement/pages/bankAdminManagementComponent.vue";
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
+        { path: '/bank-admin-management',name:'bank-admin-management',component:bankAdminManagementComponent,meta:{title:'Bank Admin Management'}},
         { path: '/my-wallets', name: 'my-wallets', component: walletManagementComponent, meta: { title: 'Wallet Management' } },
         { path: '/banks', name: 'banks', component: bankManagementComponent, meta: { title: 'Bank Management' } },
         { path: '/wallets/:walletId/bills', name: 'bill-management', component: BillManagementComponent, meta: { title: 'Bill Management' } },

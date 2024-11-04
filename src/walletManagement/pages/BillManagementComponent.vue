@@ -4,9 +4,11 @@ import { WalletApiService } from "@/walletManagement/services/wallet-api.service
 import { BankApiService } from "@/bankManagement/services/bank-api.service.js";
 import { Bill } from "@/walletManagement/model/bill.entity.js";
 import {useAuthenticationStore} from "@/IAM/services/authentication.store.js";
+import PdfTemplate from "@/walletManagement/components/pdf-template.vue";
 
 export default {
   name: "BillManagementComponent",
+  components: {PdfTemplate},
   data() {
     return {
       walletId: this.$route.params.walletId,
@@ -44,15 +46,15 @@ export default {
         await this.walletApiService.calculate(this.walletId);
         const walletResponse = await this.walletApiService.getWalletById(this.walletId);
         const wallet = walletResponse.data;
-
         const bankResponse = await this.bankApiService.getBankById(wallet.bank);
         const bank = bankResponse.data;
 
-        this.walletDetails = {
+        // Merge new data with existing wallet details
+        this.walletDetails = Object.assign({}, this.walletDetails, {
           ...wallet,
           bankName: bank ? bank.bankName : "Unknown Bank",
           tea: bank ? bank.tea : 0
-        };
+        });
       } catch (error) {
         console.error("Error fetching wallet details:", error);
         this.errorMessage = 'Error fetching wallet details';
@@ -112,18 +114,21 @@ export default {
         this.errorMessage = 'An error occurred while deleting the bill.';
       }
     }
+  },
+  exportToPDF() {
+    this.$refs.pdfTemplate.generatePDF();
   }
 };
 </script>
 
 <template>
   <div>
-    <h1>Cartera {{ walletDetails.walletName }}</h1>
-    <div class="sub-titulo">
+    <h1 v-if="walletDetails">Cartera {{ walletDetails.walletName }}</h1>
+    <div  v-if="walletDetails" class="sub-titulo">
       <span>ID: {{ walletDetails.id }}</span>
     </div>
     <div class="div-bill-btn">
-      <button class="new-bill-btn" @click="toggleNewBillCard">+ Nueva Factura</button>
+      <pv-button class="new-bill-btn" @click="toggleNewBillCard">+ Nueva Factura</pv-button>
     </div>
     <div class="parent-container">
       <div v-if="showNewBillCard" class="new-bill-card">
@@ -156,8 +161,8 @@ export default {
             <label for="dueDate">Fecha de vencimiento:</label>
             <input type="date" v-model="newBill.dueDate" id="dueDate" required/>
           </div>
-          <button class="btn-save" type="submit">Guardar</button>
-          <button class="btn-cancel" type="button" @click="cancelCreation">Cancelar</button>
+          <pv-button class="btn-save" type="submit">Guardar</pv-button>
+          <pv-button class="btn-cancel" type="button" @click="cancelCreation">Cancelar</pv-button>
         </form>
         <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
       </div>
@@ -182,9 +187,10 @@ export default {
       <p>Fecha de cierre: {{ walletDetails.closingDate }}</p>
       <p>Banco: {{ walletDetails.bankName }}</p>
       <p>Descuento: {{ walletDetails.totalDiscount }}</p>
-      <pv-button class="delete-wallet-btn" @click="deleteWallet(walletDetails.id)">
+      <PdfTemplate ref="pdfTemplate" :wallet-details="walletDetails" :bills="bills"/>
+      <pv-button class="btn-delete-wallet" @click="deleteWallet(walletDetails.id)">
+        <i class="pi pi-trash wallet-trash" ></i>
         Borrar cartera
-        <i class="pi pi-trash wallet-trash" style="font-size: 1.3rem;"></i>
       </pv-button>
     </div>
   </div>
@@ -202,7 +208,7 @@ export default {
   margin-right: auto;
 }
 
-.bill-trash:hover {
+.bill-trash:hover{
   color: #e74c3c !important;
   cursor: pointer;
 }
@@ -241,15 +247,11 @@ h1 {
   margin-right: 1em;
 }
 
-.btn-cancel,.delete-wallet-btn {
+.btn-cancel,.btn-delete-wallet {
   background-color: rgba(239, 82, 82, 0.65);
-  color: #fff;
-  font-size: 18px;
   border: none;
   border-radius: 2em;
-  padding: 10px 20px;
-  cursor: pointer;
-  margin-right: 1em;
+  transition: background-color 0.3s;
 }
 
 .new-bill-btn:hover {
@@ -264,7 +266,7 @@ h1 {
   transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
-.btn-cancel:hover, .delete-wallet-btn:hover {
+.btn-cancel:hover, .btn-delete-wallet:hover {
   background-color: firebrick !important;
   transform: translateY(-2px);
   transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
@@ -317,8 +319,6 @@ input, select{
   width: 300px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
-  cursor: pointer;
-  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out; /* Añade una transición suave */
 }
 
 .bill-card h3 {
@@ -330,12 +330,6 @@ input, select{
   margin: 0.5em 0;
   text-align: left;
   padding-left: 1em;
-}
-
-.bill-card:hover {
-  background-color: #e0e0e0;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  transform: translateY(-5px);
 }
 
 .wallet-details-card{
