@@ -66,20 +66,23 @@ export default {
     createBill: async function () {
       try {
         // Transformar las fechas al formato DD-MM-YYYY
-        const userId = this.currentUserId
+        const userId = this.currentUserId;
         const [emissionYear, emissionMonth, emissionDay] = this.newBill.emissionDate.split('-');
         const formattedEmissionDate = `${emissionDay}-${emissionMonth}-${emissionYear}`;
 
         const [dueYear, dueMonth, dueDay] = this.newBill.dueDate.split('-');
         const formattedDueDate = `${dueDay}-${dueMonth}-${dueYear}`;
 
-        const response = await this.billApiService.postBill(this.walletId, userId, {
+        await this.billApiService.postBill(this.walletId, userId, {
           ...this.newBill,
           emissionDate: formattedEmissionDate,
           dueDate: formattedDueDate,
         });
+
+        // Fetch updated wallet details and bills
         await this.fetchWalletDetails();
-        this.bills.push(response.data);
+        await this.fetchBills();
+
         this.newBill = new Bill();
         this.showNewBillCard = false;
         this.errorMessage = '';
@@ -173,6 +176,7 @@ export default {
         <h3>{{ bill.billNumber }}</h3>
         <p>Tipo de factura: {{ bill.billType === 'TYPE_BILL' ? 'Factura' : bill.billType === 'TYPE_LETTER' ? 'Letra' : 'Unknown' }}</p>
         <p>Valor neto: {{ bill.netValue }}</p>
+        <p>Descuento de factura: {{ bill.discount }}</p>
         <p>Destinatario: {{ bill.addressee }}</p>
         <p>Fecha de emisión: {{ bill.emissionDate }}</p>
         <p>Fecha de vencimiento: {{ bill.dueDate }}</p>

@@ -107,13 +107,13 @@ export default {
             {
               header: "N° Factura",
               key: "billNumber",
-              width: 30,
+              width: 25,
               align: "left"
             },
             {
               header: "Tipo",
               key: "type",
-              width: 30,
+              width: 20,
               align: "left"
             },
             {
@@ -123,15 +123,21 @@ export default {
               align: "right"
             },
             {
+              header: "Descuento",
+              key: "discount",
+              width: 30,
+              align: "right"
+            },
+            {
               header: "Destinatario",
               key: "addressee",
-              width: 45,
+              width: 30,
               align: "left"
             },
             {
               header: "F. Vencimiento",
               key: "dueDate",
-              width: 40,
+              width: 30,
               align: "left"
             }
           ]
@@ -168,8 +174,10 @@ export default {
           doc.text(bill.billType === 'TYPE_BILL' ? 'Factura' : 'Letra', tableConfig.columns[1].x, yPosition);
           const valueText = `${this.currencySymbol}${this.formatCurrency(bill.netValue)}`;
           doc.text(valueText, tableConfig.columns[2].x, yPosition);
-          doc.text(bill.addressee, tableConfig.columns[3].x, yPosition);
-          doc.text(bill.dueDate, tableConfig.columns[4].x, yPosition);
+          const discountText = `${this.currencySymbol}${this.formatCurrency(bill.discount)}`;
+          doc.text(discountText, tableConfig.columns[3].x, yPosition);
+          doc.text(bill.addressee, tableConfig.columns[4].x, yPosition);
+          doc.text(bill.dueDate, tableConfig.columns[5].x, yPosition);
 
           yPosition += 12;
 
