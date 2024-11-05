@@ -17,7 +17,7 @@ export class WalletApiService {
     }
 
     getAuthHeaders() {
-        const token = localStorage.getItem('authToken');
+        const token = localStorage.getItem('token');
         return { Authorization: `Bearer ${token}` };
     }
     getAllWallet(){

@@ -26,7 +26,7 @@ export class BillApiService {
     }
 
     getAuthHeaders() {
-        const token = localStorage.getItem('authToken'); // Adjust this line based on how you store the token
+        const token = localStorage.getItem('token');
         return { Authorization: `Bearer ${token}` };
     }
 }

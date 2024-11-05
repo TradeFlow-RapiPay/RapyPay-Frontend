@@ -8,8 +8,6 @@ import 'primeicons/primeicons.css';
 
 // PrimeVue Material Design Theme
 import router from "@/router/index.js";
-import Aura from '@primevue/themes/aura';
-import Lara from '@primevue/themes/aura';
 import Nora from '@primevue/themes/aura';
 
 import App from './app.vue'
@@ -61,7 +59,7 @@ createApp(App)
     .component('pv-button', Button)
     .component('pv-password', Password)
     .component('pv-card', Card)
-    .component('pv-confirm-pop-up',ConfirmPopup)
+    .component('pv-confirm-popup',ConfirmPopup)
     .component('pv-input-number', InputNumber)
     .component('pv-menubar',Menubar)
     .component('pv-data-table',DataTable)

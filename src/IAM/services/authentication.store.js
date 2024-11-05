@@ -39,11 +39,12 @@ export const useAuthenticationStore = defineStore({
                 localStorage.setItem('role', signInResponse.role);
                 toast.add({ severity: 'success', Success: 'Success', detail: 'Log in successful' , life: 3000,});
 
-                if (signInResponse.role === 'ROLE_ADMIN') {
-                    router.push({ name: 'bank-admin-management' });
+                if (signInResponse.role === 'ROLE_USER') {
+                    router.push({ name: 'my-wallets' });
                     return;
                 }
-                router.push({ name: 'my-wallets' });
+                router.push({ name: 'bank-admin-management' });
+
             } catch (error) {
                 toast.add({ severity: 'error', summary: 'Error', detail: 'User or password incorrect' , life: 3000,});
                 router.push({ name: 'sign-in' });
