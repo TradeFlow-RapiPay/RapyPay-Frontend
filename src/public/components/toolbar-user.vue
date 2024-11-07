@@ -132,4 +132,11 @@ img {
     display: none;
   }
 }
+
+:deep(.p-toolbar-center) {
+  position: absolute;
+  top: 6%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centra el elemento horizontal y verticalmente */
+}
 </style>
