@@ -57,7 +57,7 @@ export default {
 <template>
     <div v-if="isSignedIn">
       <a class="welcome"> Welcome,
-        <span>{{ currentUsername }} {{currentUserId}}</span>
+        <span>{{ currentUsername }}</span>
       </a>
       <a class="signout" @click="onSignOut">Sign Out <i class="pi pi-sign-out" style="font-size: 1rem"></i>
       </a>
