@@ -1,8 +1,14 @@
 import http from "@/shared/services/http-common.js";
+import Cookies from "js-cookie";
 
 export class BankApiService {
     getAuthHeaders() {
-        const token = localStorage.getItem('token');
+        const token = Cookies.get('token');
+        if (!token) {
+            console.warn("No auth token found, redirecting to login");
+            window.location.href = '/sign-up';
+            return {};
+        }
         return { Authorization: `Bearer ${token}` };
     }
 

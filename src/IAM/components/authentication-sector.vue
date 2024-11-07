@@ -17,6 +17,9 @@ export default {
     currentUsername() {
       return this.authenticationStore.currentUsername;
     },
+    currentUserId() {
+      return this.authenticationStore.currentUserId;
+    }
   },
   methods: {
     onSignIn() {
@@ -54,7 +57,7 @@ export default {
 <template>
     <div v-if="isSignedIn">
       <a class="welcome"> Welcome,
-        <span>{{ currentUsername }}</span>
+        <span>{{ currentUsername }} {{currentUserId}}</span>
       </a>
       <a class="signout" @click="onSignOut">Sign Out <i class="pi pi-sign-out" style="font-size: 1rem"></i>
       </a>

@@ -10,7 +10,7 @@ export default {
   computed: {
     currentUserId() {
       const authStore = useAuthenticationStore();
-      return authStore.getCurrentUserId;
+      return authStore.currentUserId;
     }
   },
   data() {

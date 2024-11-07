@@ -1,14 +1,14 @@
 <script>
-import {BillApiService} from "@/walletManagement/services/bill-api.service.js";
+import { BillApiService } from "@/walletManagement/services/bill-api.service.js";
 import { WalletApiService } from "@/walletManagement/services/wallet-api.service.js";
 import { BankApiService } from "@/bankManagement/services/bank-api.service.js";
 import { Bill } from "@/walletManagement/model/bill.entity.js";
-import {useAuthenticationStore} from "@/IAM/services/authentication.store.js";
+import { useAuthenticationStore } from "@/IAM/services/authentication.store.js";
 import PdfTemplate from "@/walletManagement/components/pdf-template.vue";
 
 export default {
   name: "BillManagementComponent",
-  components: {PdfTemplate},
+  components: { PdfTemplate },
   data() {
     return {
       walletId: this.$route.params.walletId,
@@ -29,7 +29,7 @@ export default {
   computed: {
     currentUserId() {
       const authStore = useAuthenticationStore();
-      return authStore.getCurrentUserId;
+      return authStore.currentUserId; // Ensure this getter is correctly defined in the store
     }
   },
   methods: {
@@ -49,12 +49,11 @@ export default {
         const bankResponse = await this.bankApiService.getBankById(wallet.bank);
         const bank = bankResponse.data;
 
-        // Merge new data with existing wallet details
-        this.walletDetails = Object.assign({}, this.walletDetails, {
+        this.walletDetails = {
           ...wallet,
           bankName: bank ? bank.bankName : "Unknown Bank",
           tea: bank ? bank.tea : 0
-        });
+        };
       } catch (error) {
         console.error("Error fetching wallet details:", error);
         this.errorMessage = 'Error fetching wallet details';
@@ -63,9 +62,8 @@ export default {
     toggleNewBillCard() {
       this.showNewBillCard = !this.showNewBillCard;
     },
-    createBill: async function () {
+    async createBill() {
       try {
-        // Transformar las fechas al formato DD-MM-YYYY
         const userId = this.currentUserId;
         const [emissionYear, emissionMonth, emissionDay] = this.newBill.emissionDate.split('-');
         const formattedEmissionDate = `${emissionDay}-${emissionMonth}-${emissionYear}`;
@@ -79,7 +77,6 @@ export default {
           dueDate: formattedDueDate,
         });
 
-        // Fetch updated wallet details and bills
         await this.fetchWalletDetails();
         await this.fetchBills();
 
@@ -102,7 +99,7 @@ export default {
     async deleteWallet(walletId) {
       try {
         await this.walletApiService.deleteWallet(walletId);
-        this.$router.push({name: 'wallet-management'});
+        this.$router.push({ name: 'wallet-management' });
       } catch (error) {
         console.error("Error deleting wallet:", error);
         this.errorMessage = 'An error occurred while deleting the wallet.';
