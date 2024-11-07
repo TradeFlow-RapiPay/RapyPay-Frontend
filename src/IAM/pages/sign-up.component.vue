@@ -29,11 +29,14 @@ export default {
     onSignUp() {
       this.submitted = true;
       if (this.username && this.password && this.confirmPassword) {
+        if (this.password.length < 8) {
+          this.errorMessage = "La contraseña debe tener al menos 8 caracteres.";
+          return;
+        }
         if (this.password !== this.confirmPassword) {
           this.errorMessage = "Las contraseñas no coinciden.";
           return;
         }
-        console.log(this.role);
         let signUpRequest = new SignUpRequest(this.username, this.password, this.role);
         this.authenticationStore.signUp(signUpRequest, this.$router, this.$toast);
       }
@@ -131,6 +134,9 @@ img{
   width: 387.4px !important;
   height: 3em;
   border-radius: 1.6em;
+}
+.p-invalid{
+  color: #ff0606;
 }
 .label-input {
   color: #666;
