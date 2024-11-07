@@ -7,7 +7,9 @@ export default {
   data() {
     return {
       authenticationStore: useAuthenticationStore(),
-      activeButton: null
+      activeButton: null,
+      showMenu: false,
+      closingMenu: false
     };
   },
   computed: {
@@ -25,10 +27,12 @@ export default {
     onSignIn() {
       this.activeButton = 'sign-in';
       router.push({ name: 'sign-in' });
+      this.closeMenuWithDelay();
     },
     onSignUp() {
       this.activeButton = 'sign-up';
       router.push({ name: 'sign-up' });
+      this.closeMenuWithDelay();
     },
     onSignOut() {
       this.authenticationStore.signOut(router);
@@ -41,10 +45,29 @@ export default {
       } else {
         this.activeButton = null;
       }
+    },
+    toggleMenu() {
+      this.showMenu = !this.showMenu;
+    },
+    handleClickOutside(event) {
+      if (!this.$el.contains(event.target)) {
+        this.closeMenuWithDelay();
+      }
+    },
+    closeMenuWithDelay() {
+      this.closingMenu = true;
+      setTimeout(() => {
+        this.showMenu = false;
+        this.closingMenu = false;
+      }, 300); // Adjust the delay time as needed
     }
   },
   created() {
     this.updateActiveButton();
+    document.addEventListener('click', this.handleClickOutside);
+  },
+  beforeDestroy() {
+    document.removeEventListener('click', this.handleClickOutside);
   },
   watch: {
     '$route'() {
@@ -55,17 +78,26 @@ export default {
 </script>
 
 <template>
-    <div v-if="isSignedIn">
-      <a class="welcome"> Welcome,
-        <span>{{ currentUsername }}</span>
-      </a>
-      <a class="signout" @click="onSignOut">Sign Out <i class="pi pi-sign-out" style="font-size: 1rem"></i>
-      </a>
-    </div>
-    <div v-else>
+  <div v-if="isSignedIn">
+    <a class="welcome"> Welcome,
+      <span>{{ currentUsername }}</span>
+    </a>
+    <a class="signout" @click="onSignOut">Sign Out <i class="pi pi-sign-out" style="font-size: 1rem"></i>
+    </a>
+  </div>
+  <div v-else>
+    <div class="desktop-buttons">
       <pv-button :class="['signin', { active: activeButton === 'sign-in' }]" @click="onSignIn"> Sign in</pv-button>
       <pv-button :class="['signup', { active: activeButton === 'sign-up' }]" @click="onSignUp">Sign up</pv-button>
     </div>
+    <div class="mobile-menu">
+      <pv-button icon="pi pi-bars" @click="toggleMenu"></pv-button>
+      <div :class="['dropdown-menu', { closing: closingMenu }]" v-if="showMenu">
+        <pv-button :class="['signin', { active: activeButton === 'sign-in' }]" @click="onSignIn"> Sign in</pv-button>
+        <pv-button :class="['signup', { active: activeButton === 'sign-up' }]" @click="onSignUp">Sign up</pv-button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -99,11 +131,11 @@ a {
 }
 .signin:hover {
   background-color: #27AE60;
-  color:white;
+  color: white;
   transform: scale(1.1);
 }
 
-.signup{
+.signup {
   background-color: #27AE60;
   color: #fff;
   font-size: 18px;
@@ -137,5 +169,45 @@ a {
 
 span {
   font-weight: 800 !important;
+}
+
+.desktop-buttons {
+  display: flex;
+}
+
+.mobile-menu {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-buttons {
+    display: none;
+  }
+  .mobile-menu {
+    display: block;
+  }
+  .signin, .signup {
+    display: block;
+    margin: 0.5em;
+  }
+  .dropdown-menu {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    right: 0; /* Align the menu to the right of the container */
+    transform: translateX(-0%); /* Move the menu to the left */
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .dropdown-menu.closing {
+    opacity: 0;
+    transform: translateY(-10%);
+  }
+  .welcome {
+    display: none; /* Hide the welcome message on mobile */
+  }
 }
 </style>

@@ -131,6 +131,10 @@ img {
   .label-item {
     display: none;
   }
+  :deep(.p-toolbar-center) {
+    justify-content: end;
+    align-items: center;
+  }
 }
 
 :deep(.p-toolbar-center) {
