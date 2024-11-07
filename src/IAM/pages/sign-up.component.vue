@@ -57,6 +57,7 @@ export default {
           <pv-float-label>
             <label class="label-input" for="username">Usuario</label>
             <pv-input-text class="input" id="username" v-model="username" :class="{'p-invalid': submitted && !username}"/>
+            <br>
             <small v-if="submitted && !username" class="p-invalid">Username es requerido.</small>
           </pv-float-label>
         </div>
@@ -64,17 +65,16 @@ export default {
           <pv-float-label>
             <label class="label-input" for="password">Contraseña</label>
             <pv-input-text class="input" id="password" v-model="password" :class="{'p-invalid': submitted && !password}" type="password"/>
-            <small v-if="submitted && !password" class="p-invalid">Contraseña es requerida</small>
           </pv-float-label>
+          <small v-if="submitted && !password" class="p-invalid">Contraseña es requerida</small>
         </div>
         <div class="field mt-5">
           <pv-float-label>
             <label class="label-input" for="confirmPassword">Confirmar Contraseña</label>
             <pv-input-text class="input" id="confirmPassword" v-model="confirmPassword" :class="{'p-invalid': submitted && !confirmPassword}" type="password"/>
-            <br>
-            <small v-if="submitted && !confirmPassword" class="p-invalid">Confirmar Contraseña es requerida</small>
-            <small v-if="errorMessage" class="p-invalid">{{ errorMessage }}</small>
           </pv-float-label>
+          <small v-if="submitted && !confirmPassword" class="p-invalid">Confirmar Contraseña es requerida</small>
+          <small v-if="errorMessage" class="p-invalid">{{ errorMessage }}</small>
         </div>
         <div>
           <label for="role">Rol:</label>
