@@ -1,6 +1,7 @@
 <script>
 import { BankApiService } from "@/bankManagement/services/bank-api.service.js";
 import { Bank } from "@/bankManagement/model/bank.entity.js";
+import {AddBankRequest} from "@/bankManagement/model/add-bank.request.js";
 
 export default {
   name: "BankAdminManagementComponent",
@@ -44,7 +45,9 @@ export default {
     },
     async addBank() {
       try {
-        await this.bankApiService.newBank(this.selectedBank);
+        console.log(this.selectedBank)
+        const addBankRequest = new AddBankRequest(this.selectedBank.bankName, this.selectedBank.tea, this.selectedBank.tcea, this.selectedBank.additionalInfo);
+        await this.bankApiService.newBank(addBankRequest);
         await this.fetchBanks();
         this.selectedBank = new Bank();
         this.displayDialog = false;
@@ -108,9 +111,13 @@ export default {
         <pv-button label="Save" icon="pi pi-check" @click="selectedBank.id ? updateBank() : addBank()"/>
       </template>
       <div class="bank-forms">
+        <h3 class="form-tittle">Nombre</h3>
         <pv-input-text v-model="selectedBank.bankName" placeholder="Nombre"/>
+        <h3 class="form-tittle">TEA</h3>
         <pv-input-number v-model.number="selectedBank.tea" mode="decimal" placeholder="TEA" :minFractionDigits="2" fluid />
+        <h3 class="form-tittle">TCEA</h3>
         <pv-input-number v-model.number="selectedBank.tcea" mode="decimal" placeholder="TCEA"  :minFractionDigits="2" fluid />
+        <h3 class="form-tittle">Información adicional</h3>
         <pv-input-text v-model="selectedBank.additionalInfo" placeholder="Información adicional"/>
       </div>
     </pv-dialog>
@@ -143,5 +150,8 @@ h1 {
 
 .bank-table {
   margin: 1.5em;
+}
+.form-tittle {
+  margin: 0;
 }
 </style>
